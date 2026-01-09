@@ -6,6 +6,7 @@ import image3 from "./assets/images/image3.jpg";
 
 const App = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Stato per aprire/chiudere il menu hamburger
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,15 +22,37 @@ const App = () => {
     <main className="font-sans text-[var(--color-black)] bg-[var(--color-white)] min-h-screen">
 
       {/* Navbar */}
-      <nav className="flex justify-between items-center py-1 px-6  ">
+      <nav className="flex justify-between items-center py-1 px-6">
         <div className="text-2xl font-bold">LOGO</div>
-        <div className="flex gap-4">
+
+        {/* Menu orizzontale visibile su schermi medi e superiori */}
+        <div className="hidden md:flex gap-4">
           <button className="btn-navbar">Home</button>
           <button className="btn-navbar">Gallery</button>
           <button className="btn-navbar">Chi Sono</button>
           <button className="btn-navbar">Contatti</button>
         </div>
+
+        {/* Bottone menu hamburger per schermi piccoli */}
+        <div className="md:hidden">
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} // Gestisce l'apertura/chiusura del menu
+            className="btn-navbar"
+          >
+            ☰
+          </button>
+        </div>
       </nav>
+
+      {/* Menu a discesa per schermi piccoli */}
+      {isMenuOpen && (
+        <div className="md:hidden flex flex-col items-center space-y-4 py-4">
+          <button className="btn-navbar">Home</button>
+          <button className="btn-navbar">Gallery</button>
+          <button className="btn-navbar">Chi Sono</button>
+          <button className="btn-navbar">Contatti</button>
+        </div>
+      )}
 
       {/* Copertina */}
       <section className="h-80 md:h-96">
