@@ -1,0 +1,35 @@
+@layer components {
+
+    /* Pulsanti navbar con effetto di hover */
+    .btn-navbar {
+      @apply px-4 py-2 font-semibold
+             text-[var(--color-verdoscuro)] /* verde scuro */
+             bg-white /* sfondo bianco */
+             hover:text-[var(--color-verdoscuro)] /* verde scuro al passaggio */
+             hover:scale-105 /* ingrandimento al passaggio del mouse */
+             hover:shadow-lg /* ombra al passaggio del mouse */
+             rounded-2xl /* angoli arrotondati */
+             transition-transform transition-shadow duration-300 ease-in-out; /* aggiunta della transizione */
+    }
+  
+    /* Card per foto e album cliccabili */
+    .card {
+      @apply flex flex-col shadow-md rounded-3xl overflow-hidden bg-white cursor-pointer transition-all duration-300 ease-in-out;
+    }
+  
+    /* Hover effect per card cliccabile */
+    .card:hover {
+      @apply scale-105 shadow-2xl;
+    }
+  
+    /* Titolo della card */
+    .card-title {
+      @apply text-[var(--color-verdoscuro)] text-xl font-bold mb-2 text-center;
+    }
+  
+    /* Descrizione della card */
+    .card-desc {
+      @apply text-black text-sm mb-4 text-center;
+    }
+  }
+  

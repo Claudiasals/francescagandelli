@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "./components.css";
+
+/* Palette personalizzata */
+@theme {
+  --color-verdoscuro: #1E431D;
+  --color-verdolight: #8CA576;
+  --color-beige-light: #D8D1C1;
+  --color-beige-medium: #D9BD9C;
+  --color-marrone: #A68365;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+}
