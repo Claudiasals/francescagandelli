@@ -1,43 +1,38 @@
 import { useState } from "react";
-import cover from "./assets/images/cover.png";
-import image1 from "./assets/images/image1.jpg";
-import image2 from "./assets/images/image2.jpg";
-import image3 from "./assets/images/image3.jpg";
-import logo from './assets/images/logo.png';
+import { Routes, Route, Link } from "react-router-dom";
+import logo from "./assets/images/logo.png";
+
+// import delle pagine
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Family from "./pages/Family";
+import Portrait from "./pages/Portrait";
+import PersonalBranding from "./pages/PersonalBranding";
+import Storytelling from "./pages/Storytelling";
 
 const App = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Stato per aprire/chiudere il menu hamburger
-
-  const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Messaggio inviato:\nNome: ${formData.name}\nEmail: ${formData.email}`);
-    setFormData({ name: "", email: "", message: "" });
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <main className="font-sans text-[var(--color-black)] bg-[var(--color-white)] min-h-screen">
 
-      {/* Navbar */}
+      {/* NAVBAR */}
       <nav className="flex justify-between items-center py-1 px-6">
-      <img src={logo} alt="Logo" className="w-48 h-auto" />
+        <img src={logo} alt="Logo" className="w-48 h-auto" />
 
-        {/* Menu orizzontale visibile su schermi medi e superiori */}
+        {/* Desktop */}
         <div className="hidden md:flex gap-4">
-          <button className="btn-navbar">Home</button>
-          <button className="btn-navbar">Gallery</button>
-          <button className="btn-navbar">Chi Sono</button>
-          <button className="btn-navbar">Contatti</button>
+          <Link to="/" className="btn-navbar">Home</Link>
+          <Link to="/family" className="btn-navbar">Gallery</Link>
+          <Link to="/about" className="btn-navbar">Chi Sono</Link>
+          <Link to="/contact" className="btn-navbar">Contatti</Link>
         </div>
 
-        {/* Bottone menu hamburger per schermi piccoli */}
+        {/* Mobile Hamburger */}
         <div className="md:hidden">
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)} // Gestisce l'apertura/chiusura del menu
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="btn-navbar"
           >
             ☰
@@ -45,53 +40,28 @@ const App = () => {
         </div>
       </nav>
 
-      {/* Menu a discesa per schermi piccoli */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden flex flex-col items-center space-y-4 py-4">
-          <button className="btn-navbar">Home</button>
-          <button className="btn-navbar">Gallery</button>
-          <button className="btn-navbar">Chi Sono</button>
-          <button className="btn-navbar">Contatti</button>
+          <Link to="/" className="btn-navbar">Home</Link>
+          <Link to="/family" className="btn-navbar">Gallery</Link>
+          <Link to="/about" className="btn-navbar">Chi Sono</Link>
+          <Link to="/contact" className="btn-navbar">Contatti</Link>
         </div>
       )}
 
-      {/* Copertina */}
-      <section className="h-80 md:h-96">
-        <img src={cover} alt="Copertina" className="w-full h-full object-cover" />
-      </section>
+      {/* CONTENUTO DINAMICO */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/family" element={<Family />} />
+        <Route path="/portrait" element={<Portrait />} />
+        <Route path="/personal-branding" element={<PersonalBranding />} />
+        <Route path="/storytelling" element={<Storytelling />} />
+      </Routes>
 
-      {/* Portfolio */}
-      <section className="p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center">Portfolio</h2>
-
-        <div className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="card">
-              <img src={image1} alt="Ritratto 1" className="w-full h-48 object-cover" />
-              <div className="p-4 flex flex-col flex-1 bg-white">
-                <h3 className="card-title">Ritratti</h3>
-                <p className="card-desc">Una raccolta di ritratti emozionanti e artistici.</p>
-              </div>
-            </div>
-            <div className="card">
-              <img src={image2} alt="Ritratto 2" className="w-full h-48 object-cover" />
-              <div className="p-4 flex flex-col flex-1 bg-white">
-                <h3 className="card-title">Ritratti</h3>
-                <p className="card-desc">Scatti intimi e professionali.</p>
-              </div>
-            </div>
-            <div className="card">
-              <img src={image3} alt="Ritratto 3" className="w-full h-48 object-cover" />
-              <div className="p-4 flex flex-col flex-1 bg-white">
-                <h3 className="card-title">Ritratti</h3>
-                <p className="card-desc">Momenti catturati con eleganza.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
+      {/* FOOTER */}
       <footer className="p-6 text-center text-sm text-white bg-[var(--color-verdolight)]">
         © 2026 Tutti i diritti riservati
       </footer>
