@@ -19,7 +19,9 @@ const App = () => {
 
       {/* NAVBAR */}
       <nav className="flex justify-between items-center py-1 px-6">
-        <img src={logo} alt="Logo" className="w-48 h-auto" />
+        <Link to="/">
+          <img src={logo} alt="Logo" className="w-48 h-auto cursor-pointer" />
+        </Link>
 
         {/* Desktop */}
         <div className="hidden md:flex gap-4">
