@@ -3,6 +3,7 @@ import cover from "./assets/images/cover.png";
 import image1 from "./assets/images/image1.jpg";
 import image2 from "./assets/images/image2.jpg";
 import image3 from "./assets/images/image3.jpg";
+import logo from './assets/images/logo.png';
 
 const App = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -23,7 +24,7 @@ const App = () => {
 
       {/* Navbar */}
       <nav className="flex justify-between items-center py-1 px-6">
-        <div className="text-2xl font-bold">LOGO</div>
+      <img src={logo} alt="Logo" className="w-48 h-auto" />
 
         {/* Menu orizzontale visibile su schermi medi e superiori */}
         <div className="hidden md:flex gap-4">
@@ -35,7 +36,7 @@ const App = () => {
 
         {/* Bottone menu hamburger per schermi piccoli */}
         <div className="md:hidden">
-          <button 
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)} // Gestisce l'apertura/chiusura del menu
             className="btn-navbar"
           >
