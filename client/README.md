@@ -18,6 +18,8 @@ Il sito è stato sviluppato utilizzando le seguenti tecnologie:
 - **ESLint**: Per mantenere la qualità del codice con linting.
 - **Node.js**: Per il backend, che gestirà le operazioni server-side come la gestione delle immagini e la logica di business.
 - **MongoDB**: Per memorizzare le fotografie, le categorie e le informazioni degli utenti.
+- **Postman**: Per testare le API del backend e verificare le richieste e le risposte delle URL.
+
 
 ## Funzionalità
 
