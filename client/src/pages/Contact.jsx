@@ -10,7 +10,7 @@ const Contact = () => {
         <div class="flex items-center gap-3">
         <PhoneCall size={32} color="#8CA576" />
           <a href="mailto:francescag.photographer@gmail.com" class="text-lg hover:underline">
-            francescag.photographer@gmail.com
+            francescagandelli.photographer@gmail.com
           </a>
         </div>
     
