@@ -10,6 +10,8 @@ import Family from "./pages/Family";
 import Portrait from "./pages/Portrait";
 import PersonalBranding from "./pages/PersonalBranding";
 import Storytelling from "./pages/Storytelling";
+import Login from "./pages/Login";
+import AdminDashboard from "./pages/AdminDashboard"; 
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,6 +66,10 @@ const App = () => {
         <Route path="/portrait" element={<Portrait />} />
         <Route path="/personal-branding" element={<PersonalBranding />} />
         <Route path="/storytelling" element={<Storytelling />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
+
+
       </Routes>
 
       {/* FOOTER */}
