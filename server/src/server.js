@@ -7,20 +7,30 @@ import dotenv from "dotenv";
 // funzione per connetterci a MongoDB (db.js)
 import connectDB from "./config/db.js";
 
+// importo le rotte per l'autenticazione
+import authRoutes from "./routes/authRoute.js";
+
 // Carico le variabili d'ambiente presenti nel file .env
 dotenv.config();
 
+
 // Creo l'istanza dell'app Express
 const app = express();
+
 
 // Middleware per leggere automaticamente il JSON presente 
 // nel body delle richieste (utile per POST, PUT, PATCH)
 app.use(express.json());
 
+// Collegamento delle rotte auth
+app.use("/api/auth", authRoutes);
+
+
 // Rotta di test per verificare che il server funzioni
 app.get("/", (req, res) => {
   res.send("Server Francesca Gandelli Portfolio OK");
 });
+
 
 // Funzione asincrona per avviare il server solo dopo che il DB è connesso
 const startServer = async () => {
