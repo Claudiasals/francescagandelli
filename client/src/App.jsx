@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import logo from "./assets/images/logo.png";
+import { List } from "phosphor-react";
 
 // Pagine
 import Home from "./pages/Home";
@@ -39,7 +40,8 @@ const App = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="btn-navbar"
           >
-            ☰
+            <List size={32} color="#8CA576" weight="bold" />
+
           </button>
         </div>
       </nav>
