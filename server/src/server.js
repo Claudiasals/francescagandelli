@@ -1,14 +1,13 @@
 // Express il framework per creare il server HTTP
 import express from "express";
-
 // dotenv per leggere le variabili d'ambiente dal file .env
 import dotenv from "dotenv";
-
 // funzione per connetterci a MongoDB (db.js)
 import connectDB from "./config/db.js";
-
 // importo le rotte per l'autenticazione
 import authRoutes from "./routes/authRoute.js";
+// importo CORS per permettere richieste cross-origin
+import cors from "cors";
 
 // Carico le variabili d'ambiente presenti nel file .env
 dotenv.config();
@@ -16,6 +15,32 @@ dotenv.config();
 
 // Creo l'istanza dell'app Express
 const app = express();
+
+// Configurazione CORS sicura
+const allowedOrigins = [
+  // Lista dei domini da cui accetti richieste:
+  "http://localhost:5173",  // Vite frontend in sviluppo
+  "https://tuo-dominio.com"  // produzione
+];
+
+// Middleware CORS per Express
+// Configuro CORS per permettere richieste solo dai domini specificati
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `La richiesta da ${origin} non è permessa!`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // permette cookie se servono in futuro
+}));
+/*
+origin → è il dominio che sta facendo la richiesta (es. http://localhost:5173).
+callback → è una funzione che chiami per dire “ok, questa origine è permessa” oppure “no, blocca”.
+*/
 
 
 // Middleware per leggere automaticamente il JSON presente 
