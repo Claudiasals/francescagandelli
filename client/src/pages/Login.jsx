@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { User, Lock } from "phosphor-react";
+import { User, Lock, Eye, EyeClosed} from "phosphor-react";
 
 const Login = () => {
 
     // Stati per input
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    // stato per mostrare/nascondere password
+    const [showPassword, setShowPassword] = useState(false);
+
 
     // Funzione di submit
     const handleLogin = async (e) => {
@@ -64,7 +67,6 @@ const Login = () => {
 
             <form className="flex flex-col gap-6 " onSubmit={handleLogin}>
 
-
                 <div className="relative gap-2 items-center">
                     <input
                         className=" pl-12 border-2 border-[var(--color-verdolight)] 
@@ -85,18 +87,35 @@ const Login = () => {
                         className=" pl-12 border-2 border-[var(--color-verdolight)] 
                 rounded-xl p-2 bg-white focus:border-[var(--color-verdoscuro)] 
                 outline-none peer"
-                        type="password"
+                        // Aggiunta gestione mostra/nascondi password
+                        type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Lock size={32} weight="duotone"
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8CA576] 
-                    peer-focus:text-[var(--color-verdoscuro)]" />
+                        className="absolute left-3 top-1/2 -translate-y-1/2 
+                        text-[#8CA576] peer-focus:text-[var(--color-verdoscuro)]" />
+                   
+                    {showPassword ? (
+                        <Eye
+                            size={24} weight="bold"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 
+               text-[#8CA576] cursor-pointer 
+               hover:text-[var(--color-verdoscuro)] transition-colors"
+                            onClick={() => setShowPassword(false)}
+                        />
+                    ) : (
+                        <EyeClosed size={24} weight="bold"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 
+                    text-[#8CA576] cursor-pointer 
+                    hover:text-[var(--color-verdoscuro)] transition-colors"
+                            onClick={() => setShowPassword(true)} /> // icona per mostrare
+                        )}
                 </div>
 
-                <button type="submit" className="shadow-md rounded-xl p-2 bg-[var(--color-verdolight)] 
-            text-white w-30 hover:bg-[var(--color-verdoscuro)] active:bg-[var(--color-verdolight)] 
+                <button type="submit" className="mx-auto shadow-md rounded-xl p-2 bg-[var(--color-verdolight)] 
+            text-white w-32 hover:bg-[var(--color-verdoscuro)] active:bg-[var(--color-verdolight)] 
             active:text-[var(--color-verdoscuro)] transition-colors">
                     Accedi
                 </button>
