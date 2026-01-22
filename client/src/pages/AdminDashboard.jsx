@@ -96,7 +96,12 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        <div className=" flex gap-2 p-2 justify-end m-6">
+     
+
+      </section>
+
+
+      <div className=" flex gap-2 p-2 justify-end m-2">
           <button
             type="button"
             className=" 
@@ -114,11 +119,6 @@ const AdminDashboard = () => {
             />
           </button>
         </div>
-
-      </section>
-
-
-
 
 
     </>
