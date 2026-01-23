@@ -1,8 +1,12 @@
+import { useState } from "react";
 import Card from "../components/Card";
 import cover from "../assets/images/cover.png";
 import { Pencil, Trash, ArrowsClockwise, Plus, Check } from "phosphor-react";
+import { useEffect } from "react";
+
 
 const AdminDashboard = () => {
+
   const token = localStorage.getItem("adminToken");
 
   if (!token) {
@@ -11,6 +15,69 @@ const AdminDashboard = () => {
     return null; // evita di renderizzare la dashboard
   }
 
+  const [coverFile, setCoverFile] = useState(null);  // file scelto dall'utente
+  const [preview, setPreview] = useState(null);   // anteprima immagine
+  const [coverUrl, setCoverUrl] = useState(null); // URL vero dal DB
+
+// carica la copertina esistente dal DB al montaggio del componente
+useEffect(() => { 
+  const fetchCover = async () => {
+    const token = localStorage.getItem("adminToken");
+    try {
+      const res = await fetch("http://localhost:5000/api/cover", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.coverUrl) setCoverUrl(data.coverUrl);
+    } catch (err) {
+      console.error("Errore fetch copertina:", err);
+    }
+  };
+
+  fetchCover();
+}, []);
+
+  // Funzione per gestire la scelta del file
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    setCoverFile(file);
+
+    // Genera l'anteprima locale
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    if (file) reader.readAsDataURL(file);
+  };
+
+  // aggiungo onClick al pusante "salva"
+  const handleSaveCover = async () => {
+    if (!coverFile) return; // nessun file selezionato
+
+    const formData = new FormData();
+    formData.append("cover", coverFile);
+
+    const response = await fetch("http://localhost:5000/api/cover", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+  if (response.ok) {
+    setCoverUrl(data.coverUrl); // URL vero Cloudinary
+    setPreview(null);           // butta la base64
+    setCoverFile(null);
+    alert("Copertina aggiornata con successo!");
+  } else {
+    alert("Errore nel caricamento");
+  }
+};
+
+
   const categories = [
     { id: 1, title: "Famiglia", description: "Momenti in famiglia", link: "/family" },
     { id: 2, title: "Ritratti", description: "Scatti professionali", link: "/portrait" },
@@ -18,13 +85,14 @@ const AdminDashboard = () => {
     { id: 4, title: "Personal Branding", description: "Immagini per il tuo brand", link: "/personal-branding" },
   ];
 
+
   return (
     <>
       <section className=" md:h-96 ">
 
         <div className=" flex gap-2 p-4 justify-end">
-          <button
-            type="button"
+
+          <label
             className=" 
     w-9 h-9 rounded-full 
     bg-[var(--color-verdolight)] 
@@ -36,8 +104,15 @@ const AdminDashboard = () => {
               size={24}
               className="text-white"
             />
-          </button>
-          <button type="button"
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleCoverChange}
+            />
+          </label>
+
+          {/* <button type="button"
             className="
     w-9 h-9 rounded-full 
     bg-[var(--color-verdolight)] 
@@ -45,9 +120,14 @@ const AdminDashboard = () => {
     hover:bg-[var(--color-verdoscuro)]
     transition-colors" >
             <Trash size={24} className="text-white" />
-          </button>
+          </button> */}
+
         </div>
-        <img src={cover} alt="Copertina" className="w-full h-full object-cover" />
+
+        <img src={preview || coverUrl || cover} alt="Copertina" className="w-full h-full object-cover" />
+    {/* coverUrl = verità dal backend
+    preview = solo anteprima temporanea
+    cover.png = solo fallback */}
       </section>
 
       <section className="p-8 mt-1 md:mt-15">
@@ -95,34 +175,32 @@ const AdminDashboard = () => {
             <Card key={cat.id} {...cat} />
           ))}
         </div>
-
-     
-
       </section>
 
-
       <div className=" flex gap-2 p-2 justify-end m-2">
-          <button
-            type="button"
-            className=" 
+        <button
+          type="button"
+          className=" 
     p-4 gap-2 h-10 rounded-xl 
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
     transition-colors "
-          >
-            <span className="text-white font-semibold">Salva</span>
-            <Check
-              size={24}
-              className="text-white"
-              weight="bold"
-            />
-          </button>
-        </div>
+          onClick={handleSaveCover}
+        >
+          <span className="text-white font-semibold">Salva</span>
+          <Check
+            size={24}
+            className="text-white"
+            weight="bold"
+          />
+        </button>
+      </div>
 
 
     </>
   );
 };
+
 
 export default AdminDashboard;

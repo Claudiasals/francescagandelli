@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
 import Card from "../components/Card";
-import cover from "../assets/images/cover.png";
-
+import cover from "../assets/images/cover.png"; // fallback locale
 
 const Home = () => {
+  const [coverUrl, setCoverUrl] = useState(null);
+
+  useEffect(() => {
+    const fetchCover = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/cover");
+        const data = await res.json();
+        if (data.coverUrl) setCoverUrl(data.coverUrl);
+      } catch (err) {
+        console.error("Errore fetch copertina pubblica:", err);
+      }
+    };
+
+    fetchCover();
+  }, []);
+
   const categories = [
     { id: 1, title: "Famiglia", description: "Momenti in famiglia", link: "/family" },
     { id: 2, title: "Ritratti", description: "Scatti professionali", link: "/portrait" },
@@ -13,7 +29,11 @@ const Home = () => {
   return (
     <>
       <section className="h-80 md:h-96">
-        <img src={cover} alt="Copertina" className="w-full h-full object-cover" />
+        <img
+          src={coverUrl ? `${coverUrl}?t=${Date.now()}` : cover}
+          alt="Copertina"
+          className="w-full h-full object-cover"
+        />
       </section>
 
       <section className="p-8">
@@ -29,31 +49,3 @@ const Home = () => {
 };
 
 export default Home;
-
-//# CLOUDINARY 
-/* 
-Cloudinary: Cos’è?
-Servizio di gestione e delivery di immagini e video. Si occupa automaticamente di:
-Ridimensionamento, compressione e formati moderni (WebP, AVIF).
-CDN globale per servire le immagini velocemente.
-Trasformazioni lato URL (es. ritaglio, filtri, effetti).
-
-Prestazioni:
-Ottimizzato per web: immagini veloci e responsive.
-CDN integrato per una distribuzione rapida in tutto il mondo.
-Caricamento semplice direttamente da frontend o backend.
-
-Prezzo e piano gratuito:
-Free plan: 25.000 trasformazioni al mese, 25 GB di storage, 25 GB di bandwidth.
-Perfetto per un portfolio fotografico fino a 200 foto, anche ad alta risoluzione.
-
-Pro:
-Ottimizzazione immagini automatica.
-CDN inclua.
-Trasformazioni dinamiche via URL.
-Gratis fino a 25 GB.
-
-Contro:
-Meno flessibile come gestione file rispetto a S3 (sei vincolata a come Cloudinary organizza i file).
-Alcune feature avanzate sono a pagamento.
-*/

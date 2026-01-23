@@ -8,6 +8,9 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 // importo CORS per permettere richieste cross-origin
 import cors from "cors";
+// rotta per copertina portfolio
+import coverRoutes from "./routes/coverRoute.js";
+
 
 // Carico le variabili d'ambiente presenti nel file .env
 dotenv.config();
@@ -56,6 +59,8 @@ app.get("/", (req, res) => {
   res.send("Server Francesca Gandelli Portfolio OK");
 });
 
+// rotta per copertina
+app.use("/api", coverRoutes);
 
 // Funzione asincrona per avviare il server solo dopo che il DB è connesso
 const startServer = async () => {

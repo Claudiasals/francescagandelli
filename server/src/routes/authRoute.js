@@ -10,4 +10,5 @@ router.post("/login", loginAdmin);
 // Route protetta dashboard
 router.get("/dashboard", authMiddleware, getDashboard);
 
+
 export default router;
