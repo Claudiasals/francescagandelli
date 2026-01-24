@@ -98,7 +98,8 @@ useEffect(() => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors "
+    transition-colors transform transition-transform duration-150 active:scale-70
+"
           >
             <Pencil
               size={24}
@@ -142,7 +143,8 @@ useEffect(() => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors "
+    transition-colors transform transition-transform duration-150 active:scale-70
+"
             >
               <Pencil
                 size={24}
@@ -155,7 +157,7 @@ useEffect(() => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors" >
+    transition-colors transform transition-transform duration-150 active:scale-70" >
               <ArrowsClockwise size={24} className="text-white" />
             </button>
             <button type="button"
@@ -164,7 +166,7 @@ useEffect(() => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors" >
+    transition-colors transform transition-transform duration-150 active:scale-70" >
               <Plus size={24} className="text-white" />
             </button>
           </div>
@@ -185,7 +187,7 @@ useEffect(() => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors "
+    transition-colors transform transition-transform duration-150 active:scale-70"
           onClick={handleSaveCover}
         >
           <span className="text-white font-semibold">Salva</span>
