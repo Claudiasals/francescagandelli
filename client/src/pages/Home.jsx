@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
-import cover from "../assets/images/cover.png"; // fallback locale
 
 const Home = () => {
   const [coverUrl, setCoverUrl] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCover = async () => {
@@ -13,6 +13,8 @@ const Home = () => {
         if (data.coverUrl) setCoverUrl(data.coverUrl);
       } catch (err) {
         console.error("Errore fetch copertina pubblica:", err);
+      } finally {
+        setLoading(false); // solo alla fine del fetch
       }
     };
 
@@ -29,11 +31,15 @@ const Home = () => {
   return (
     <>
       <section className="h-80 md:h-96">
-        <img
-          src={coverUrl ? `${coverUrl}?t=${Date.now()}` : cover}
-          alt="Copertina"
-          className="w-full h-full object-cover"
-        />
+      {loading ? (
+          <div className="w-full h-full bg-gray-200 animate-pulse"></div> // placeholder mentre carica
+        ) : (
+          <img
+            src={coverUrl || cover} // fallback solo se coverUrl mancante
+            alt="Copertina"
+            className="w-full h-full object-cover"
+          />
+        )}
       </section>
 
       <section className="p-8">

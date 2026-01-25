@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Card from "../components/Card";
-import cover from "../assets/images/cover.png";
 import { Pencil, Trash, ArrowsClockwise, Plus, Check } from "phosphor-react";
 import { useEffect } from "react";
 
@@ -19,24 +18,27 @@ const AdminDashboard = () => {
   const [preview, setPreview] = useState(null);   // anteprima immagine
   const [coverUrl, setCoverUrl] = useState(null); // URL vero dal DB
   const [isSaved, setIsSaved] = useState(false); // false = "Salva", true = "Salvato"
+  const [loading, setLoading] = useState(true);
+  
+  // carica la copertina esistente dal DB al montaggio del componente
+  useEffect(() => {
+    const fetchCover = async () => {
+      const token = localStorage.getItem("adminToken");
+      try {
+        const res = await fetch("http://localhost:5000/api/cover", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (data.coverUrl) setCoverUrl(data.coverUrl);
+      } catch (err) {
+        console.error("Errore fetch copertina:", err);
+      } finally {
+        setLoading(false); // solo quando finisce il fetch
+      }
+    };
 
-// carica la copertina esistente dal DB al montaggio del componente
-useEffect(() => { 
-  const fetchCover = async () => {
-    const token = localStorage.getItem("adminToken");
-    try {
-      const res = await fetch("http://localhost:5000/api/cover", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (data.coverUrl) setCoverUrl(data.coverUrl);
-    } catch (err) {
-      console.error("Errore fetch copertina:", err);
-    }
-  };
-
-  fetchCover();
-}, []);
+    fetchCover();
+  }, []);
 
   // Funzione per gestire la scelta del file
   const handleCoverChange = (e) => {
@@ -65,14 +67,14 @@ useEffect(() => {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setCoverUrl(data.coverUrl); // aggiorna la copertina
         setPreview(null);
         setCoverFile(null);
-  
+
         setIsSaved(true); // cambia bottone a "Salvato"
       } else {
         console.error("Errore nel caricamento");
@@ -130,10 +132,18 @@ useEffect(() => {
 
         </div>
 
-        <img src={preview || coverUrl || cover} alt="Copertina" className="w-full h-full object-cover" />
-    {/* coverUrl = verità dal backend
+
+        {loading ? (
+          <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+        ) : (
+          <img src={preview || coverUrl} alt="Copertina" className="w-full h-full object-cover" />
+        )}
+
+
+        {/* coverUrl = verità dal backend
     preview = solo anteprima temporanea
     cover.png = solo fallback */}
+
       </section>
 
       <section className="p-8 mt-1 md:mt-15">
@@ -195,10 +205,10 @@ useEffect(() => {
     transition-colors transform transition-transform duration-150 active:scale-70"
           onClick={handleSaveCover}
         >
-<span className="text-white font-semibold">
-    {isSaved ? "Salvato" : "Salva"}
-  </span>
-            <Check
+          <span className="text-white font-semibold">
+            {isSaved ? "Salvato" : "Salva"}
+          </span>
+          <Check
             size={24}
             className="text-white"
             weight="bold"
