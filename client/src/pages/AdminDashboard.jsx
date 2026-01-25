@@ -18,6 +18,7 @@ const AdminDashboard = () => {
   const [coverFile, setCoverFile] = useState(null);  // file scelto dall'utente
   const [preview, setPreview] = useState(null);   // anteprima immagine
   const [coverUrl, setCoverUrl] = useState(null); // URL vero dal DB
+  const [isSaved, setIsSaved] = useState(false); // false = "Salva", true = "Salvato"
 
 // carica la copertina esistente dal DB al montaggio del componente
 useEffect(() => { 
@@ -41,6 +42,7 @@ useEffect(() => {
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
     setCoverFile(file);
+    setIsSaved(false); // resetto stato a false quando scelgo nuovo file
 
     // Genera l'anteprima locale
     const reader = new FileReader();
@@ -57,25 +59,28 @@ useEffect(() => {
     const formData = new FormData();
     formData.append("cover", coverFile);
 
-    const response = await fetch("http://localhost:5000/api/cover", {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-
-    const data = await response.json();
-
-  if (response.ok) {
-    setCoverUrl(data.coverUrl); // URL vero Cloudinary
-    setPreview(null);           // butta la base64
-    setCoverFile(null);
-    alert("Copertina aggiornata con successo!");
-  } else {
-    alert("Errore nel caricamento");
-  }
-};
+    try {
+      const response = await fetch("http://localhost:5000/api/cover", {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setCoverUrl(data.coverUrl); // aggiorna la copertina
+        setPreview(null);
+        setCoverFile(null);
+  
+        setIsSaved(true); // cambia bottone a "Salvato"
+      } else {
+        console.error("Errore nel caricamento");
+      }
+    } catch (err) {
+      console.error("Errore upload:", err);
+    }
+  };
 
 
   const categories = [
@@ -190,8 +195,10 @@ useEffect(() => {
     transition-colors transform transition-transform duration-150 active:scale-70"
           onClick={handleSaveCover}
         >
-          <span className="text-white font-semibold">Salva</span>
-          <Check
+<span className="text-white font-semibold">
+    {isSaved ? "Salvato" : "Salva"}
+  </span>
+            <Check
             size={24}
             className="text-white"
             weight="bold"
