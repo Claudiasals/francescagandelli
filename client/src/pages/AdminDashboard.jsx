@@ -58,6 +58,9 @@ const AdminDashboard = () => {
   const handleSaveCover = async () => {
     if (!coverFile) return; // nessun file selezionato
 
+    // prendo il token
+    const token = localStorage.getItem("adminToken");
+
     const formData = new FormData();
     formData.append("cover", coverFile);
 
@@ -68,17 +71,24 @@ const AdminDashboard = () => {
         body: formData,
       });
 
-      const data = await response.json();
 
-      if (response.ok) {
-        setCoverUrl(data.coverUrl); // aggiorna la copertina
+      let data = null;
+      try {
+        data = await response.json();
+      } catch {
+        console.error("Risposta non JSON dal backend");
+      }
+      
+      if (!response.ok) {
+        console.error("Errore backend:", data);
+        return;
+      }
+      
+        setCoverUrl(data.coverUrl  + "?t=" + Date.now()); // aggiorna la copertina
         setPreview(null);
         setCoverFile(null);
-
         setIsSaved(true); // cambia bottone a "Salvato"
-      } else {
-        console.error("Errore nel caricamento");
-      }
+    
     } catch (err) {
       console.error("Errore upload:", err);
     }
