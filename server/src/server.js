@@ -10,6 +10,8 @@ import authRoutes from "./routes/authRoute.js";
 import cors from "cors";
 // rotta per copertina portfolio
 import coverRoutes from "./routes/coverRoute.js";
+// libreria email x form  
+import nodemailer from "nodemailer";  
 
 
 // Carico le variabili d'ambiente presenti nel file .env
@@ -18,6 +20,27 @@ dotenv.config();
 
 // Creo l'istanza dell'app Express
 const app = express();
+
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+/* TEST FORM EMAIL:
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ SMTP non valido:", error);
+  } else {
+    console.log("✅ SMTP pronto a inviare email");
+  }
+}); */
+ 
+
 
 // Configurazione CORS sicura
 const allowedOrigins = [
@@ -29,10 +52,10 @@ const allowedOrigins = [
 // Middleware CORS per Express
 // Configuro CORS per permettere richieste solo dai domini specificati
 app.use(cors({
-  origin: function(origin, callback){
+  origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
       const msg = `La richiesta da ${origin} non è permessa!`;
       return callback(new Error(msg), false);
     }
@@ -59,14 +82,47 @@ app.get("/", (req, res) => {
   res.send("Server Francesca Gandelli Portfolio OK");
 });
 
-// rotta per copertina
+// Rotta per copertina
 app.use("/api", coverRoutes);
+
+
+// Rotta per il form di contatto
+app.post("/api/contact", async (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({
+      status: "error",
+      message: "Tutti i campi sono obbligatori"
+    });
+  }
+
+  try {
+    await transporter.sendMail({
+      from: email,
+      to: "francescagandelli.photographer@gmail.com",
+      subject: `Messaggio da ${name}`,
+      text: message,
+    });
+
+    res.json({ status: "ok", message: "Messaggio inviato!" });
+
+  } catch (err) {
+    console.error("Errore invio email:", err);
+    res.status(500).json({
+      status: "error",
+      message: "Errore nell'invio del messaggio"
+    });
+  }
+});
+
+
 
 // Funzione asincrona per avviare il server solo dopo che il DB è connesso
 const startServer = async () => {
   try {
     // Aspetta la connessione al database
-    await connectDB(); 
+    await connectDB();
     console.log("Database connesso correttamente!"); // Stampa messaggio se va tutto bene
 
     // porta su cui il server ascolterà le richieste

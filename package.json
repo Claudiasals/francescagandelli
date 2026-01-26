@@ -2,6 +2,7 @@
   "dependencies": {
     "cloudinary": "^2.9.0",
     "multer": "^2.0.2",
+    "nodemailer": "^7.0.12",
     "phosphor-react": "^1.4.1"
   }
 }
