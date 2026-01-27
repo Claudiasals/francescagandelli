@@ -100,7 +100,7 @@ app.post("/api/contact", async (req, res) => {
   try {
     await transporter.sendMail({
       from: email,
-      to: "francescagandelli.photographer@gmail.com",
+      to: "francesca.gandelli94@gmail.com",
       subject: `Messaggio da ${name}`,
       text: message,
     });

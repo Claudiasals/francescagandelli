@@ -115,7 +115,7 @@ const AdminDashboard = () => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70
+    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120
 "
           >
             <Pencil
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70
+    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120
 "
             >
               <Pencil
@@ -182,7 +182,7 @@ const AdminDashboard = () => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70" >
+    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120" >
               <ArrowsClockwise size={24} className="text-white" />
             </button>
             <button type="button"
@@ -191,7 +191,7 @@ const AdminDashboard = () => {
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70" >
+    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120" >
               <Plus size={24} className="text-white" />
             </button>
           </div>
@@ -207,12 +207,12 @@ const AdminDashboard = () => {
       <div className=" flex gap-2 p-2 justify-end m-2">
         <button
           type="button"
-          className=" 
+          className=" text-lg font-semibold
     p-4 gap-2 h-10 rounded-xl 
     bg-[var(--color-verdolight)] 
     flex items-center justify-center
     hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70"
+    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120"
           onClick={handleSaveCover}
         >
           <span className="text-white font-semibold">

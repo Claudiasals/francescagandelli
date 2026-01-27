@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import logo from "./assets/images/logo.png";
 import { List } from "phosphor-react";
+import { InstagramLogo } from "phosphor-react";
+import { Envelope } from "phosphor-react";
 
 // Pagine
 import Home from "./pages/Home";
@@ -12,7 +14,15 @@ import Portrait from "./pages/Portrait";
 import PersonalBranding from "./pages/PersonalBranding";
 import Storytelling from "./pages/Storytelling";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard"; 
+import AdminDashboard from "./pages/AdminDashboard";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookiePolicy from "./pages/CookiePolicy";
+import TermsOfService from "./pages/TermsOfService";
+import FamilyDashboard from "./pages/FamilyDashboard";
+import PortraitDashboard from "./pages/PortraitDashboard";
+import PersonalBrandingDashboard from "./pages/PBrandingDashboard";
+import StorytellingDashboard from "./pages/STDashboard";
+
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,12 +59,18 @@ const App = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden fixed left-0 right-0 bg-white shadow-md z-40"
-             style={{ top: "calc(3.5rem)" /* altezza navbar */ }}>
+          style={{ top: "calc(3.5rem)" /* altezza navbar */ }}>
           <div className="flex flex-col items-center space-y-2 py-2">
             <Link to="/" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/family" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Gallery</Link>
             <Link to="/about" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Chi Sono</Link>
             <Link to="/contact" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Contatti</Link>
+            <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
+              target="_blank" //apre il link in una nuova scheda
+              rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
+              className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200 text-[var(--color-verdoscuro)]">
+              <InstagramLogo size={40} weight="duotone" />
+            </a>
           </div>
         </div>
       )}
@@ -70,15 +86,38 @@ const App = () => {
         <Route path="/storytelling" element={<Storytelling />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<AdminDashboard />} />
-
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/family-dashboard" element={<FamilyDashboard />} />
+        <Route path="/portrait-dashboard" element={<PortraitDashboard />} />
+        <Route path="/personal-branding-dashboard" element={<PersonalBrandingDashboard />} />
+        <Route path="/storytelling-dashboard" element={<StorytellingDashboard />} />
 
       </Routes>
 
       {/* FOOTER */}
       <footer className="mt-auto p-6 text-center text-[0.625rem] text-white bg-[var(--color-verdolight)]">
-        Tutti i testi, le immagini e i contenuti presenti su questo sito sono protetti.<br />
-        È vietato qualunque utilizzo senza il consenso scritto dell'autore. <br />
-        © 2026 Francesca Gandelli. Tutti i diritti riservati.
+        <div>
+          <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
+            target="_blank" //apre il link in una nuova scheda
+            rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
+            className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
+            <InstagramLogo size={40} weight="duotone" />
+          </a>
+          <a href="mailto:francescagandelli.photographer@gmail.com"
+            className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
+            <Envelope size={40} weight="duotone" />
+          </a>
+        </div>
+        <div>
+          <Link to="/privacy-policy" className="hover:underline mx-2">Privacy Policy</Link> |
+          <Link to="/cookie-policy" className="hover:underline mx-2">Cookie Policy</Link> |
+          <Link to="/terms-of-service" className="hover:underline mx-2">Termini di Servizio</Link>
+        </div>
+        <p>Tutti i testi, le immagini e i contenuti presenti su questo sito sono protetti.
+          È vietato qualunque utilizzo senza il consenso scritto dell'autore.
+          © 2026 Francesca Gandelli. Tutti i diritti riservati.</p>
       </footer>
       {/* 0.625rem = 10px, più piccolo di text-xs (che è 0.75rem = 12px).*/}
 
