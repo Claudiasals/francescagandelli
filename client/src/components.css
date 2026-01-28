@@ -1,20 +1,62 @@
 @layer components {
 
+  @layer components {
+
+    /* Bottone principale del sito */
+    .btn-primary {
+      @apply 
+        text-lg font-semibold
+        p-4 gap-2 h-10 rounded-xl
+        flex items-center justify-center
+        transition-colors transition-transform duration-150
+        active:scale-75 hover:scale-110;
+      
+      background-color: var(--color-verdolight);
+      color: white;
+    }
+  
+    .btn-primary:hover {
+      background-color: var(--color-verdoscuro);
+    }
+  
+  }
+  
     /* Pulsanti navbar con effetto di hover */
     .btn-navbar {
       @apply px-4 py-2 font-semibold
-             text-[var(--color-verdoscuro)] /* verde scuro */
-             bg-white /* sfondo bianco */
+             text-[var(--color-verdolight)] /* verde scuro */
              hover:text-[var(--color-verdoscuro)] /* verde scuro al passaggio */
-             hover:scale-105 /* ingrandimento al passaggio del mouse */
-             hover:shadow-lg /* ombra al passaggio del mouse */
-             rounded-2xl /* angoli arrotondati */
+             hover:scale-125 /* ingrandimento al passaggio del mouse */
              transition-transform transition-shadow duration-300 ease-in-out; /* aggiunta della transizione */
-    }
+            }
   
+/* Pulsante circolare per dashboard */
+    @layer components {
+      .btn-edit-gallery {
+        @apply 
+          w-9 h-9 rounded-full
+          bg-[var(--color-verdolight)]
+          flex items-center justify-center
+          hover:bg-[var(--color-verdoscuro)]
+          transition-colors transition-transform duration-150
+          active:scale-75 hover:scale-110
+          cursor-pointer;
+      }
+    }
+
+    .icon-menu {
+      @apply 
+      text-[var(--color-verdoscuro)]
+      mx-2 inline-block 
+      hover:scale-150 active:scale-95  
+      transition-transform duration-200 
+    }
+
     /* Card per foto e album cliccabili */
     .card {
-      @apply flex flex-col shadow-md rounded-3xl overflow-hidden bg-white cursor-pointer transition-all duration-300 ease-in-out;
+      @apply flex flex-col shadow-md rounded-3xl 
+      overflow-hidden bg-white cursor-pointer 
+      transition-all duration-300 ease-in-out
     }
   
     /* Hover effect per card cliccabile */

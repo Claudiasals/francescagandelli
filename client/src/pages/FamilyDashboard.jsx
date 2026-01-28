@@ -15,13 +15,7 @@ const FamilyDashboard = () => {
                 <div className="flex gap-2 p-2 justify-end">
                     <button
                         type="button"
-                        className=" 
-    w-9 h-9 rounded-full 
-    bg-[var(--color-verdolight)] 
-    flex items-center justify-center
-    hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120
-"
+                        className="btn-edit-gallery"
                     >
                         <Pencil
                             size={24}
@@ -29,21 +23,11 @@ const FamilyDashboard = () => {
                         />
                     </button>
                     <button type="button"
-                        className="
-    w-9 h-9 rounded-full 
-    bg-[var(--color-verdolight)] 
-    flex items-center justify-center
-    hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120" >
+                        className="btn-edit-gallery" >
                         <ArrowsClockwise size={24} className="text-white" />
                     </button>
                     <button type="button"
-                        className="
-    w-9 h-9 rounded-full 
-    bg-[var(--color-verdolight)] 
-    flex items-center justify-center
-    hover:bg-[var(--color-verdoscuro)]
-    transition-colors transform transition-transform duration-150 active:scale-70 hover:scale-120" >
+                        className="btn-edit-gallery" >
                         <Plus size={24} className="text-white" />
                     </button>
                 </div>

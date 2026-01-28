@@ -5,32 +5,30 @@ const Card = ({ title, description, link }) => {
   const navigate = useNavigate();
   const [pressed, setPressed] = useState(false);
 
-  const handleClick = () => {
-    setPressed(true);
-
-    // shrink
-    setTimeout(() => {
-      setPressed(false); // torna grande
-    }, 120);
-
-    // navigate dopo l'animazione completa
-    setTimeout(() => {
-      navigate(link);
-    }, 260);
-  };
-
   return (
     <div
-      onClick={handleClick}
+      // Eventi per shrink visibile al click / touch
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      onTouchStart={() => setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
+      onClick={() => {
+        setPressed(true); // piccolo shrink al click
+        setTimeout(() => navigate(link), 150); // navigate dopo animazione
+      }}
       className={`
         card cursor-pointer
-        transform transition-transform duration-100 ease-in-out
-        ${pressed ? "scale-95" : "scale-100"}
+        transform transition-transform duration-200 ease-in-out
+        ${pressed ? "scale-95" : "hover:scale-105 scale-100"}
       `}
     >
+      {/* Immagine / Placeholder */}
       <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-600">
         {title}
       </div>
+
+      {/* Contenuto della card */}
       <div className="p-4 bg-white">
         <h3 className="card-title">{title}</h3>
         <p className="card-desc">{description}</p>

@@ -58,11 +58,10 @@ const Contact = () => {
 
   return (
 
-
     <section className="contact-section p-8 max-w-2xl mx-auto space-y-18">
 
       <div className="flex flex-col justify-center items-center gap-6  ">
-        <h2 className="text-3xl font-bold text-[var(--color-verdolight)] ">Contatti</h2>
+        <h2 className="text-3xl font-bold text-[var(--color-verdolight)] ">Contattami</h2>
 
         <p className="text-lg">
           Se desideri prenotare una sessione fotografica o
@@ -72,73 +71,78 @@ const Contact = () => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-18">
 
-        {/* Contatti */}
-        <a
-          href="mailto:francescagandelli.photographer@gmail.com"
-          className="flex items-center gap-2 hover:scale-120 active:scale-75 transition-transform duration-200"
-        >
-          <EnvelopeOpen size={32} weight="duotone" color="#8CA576" />
-          <span className="text-black text-lg">francescagandelli.ph@gmail.com</span>
-        </a>
+        {/* Form */}
+        {errorMessage && (
+          <p className="text-red-600 font-semibold">{errorMessage}</p>
+        )}
 
-        <a
-          href="tel:+393466106008"
-          className="flex items-center gap-2 hover:scale-120 active:scale-75 transition-transform duration-200"
-        >
-          <PhoneCall size={32} weight="duotone" color="#8CA576" />
-          <span className="text-black text-lg">+39 346 610 6008</span>
-        </a>
+        {!submitted ? (
+          <form onSubmit={handleSubmit} className=" flex flex-col gap-4 ">
+            <p className="text-lg font-bold">
+              Compila il form, ti risponderò il prima possibile! </p>
 
-        <a
-          href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 hover:scale-120 active:scale-75 transition-transform duration-200"
-        >
-          <InstagramLogo size={40} weight="duotone" color="#8CA576" />
-          <span className="text-black text-lg">Instagram @francescagandelli_ph</span>
-        </a>
+            <label className="flex flex-col">
+              <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="Nome" />
+            </label>
+            <label className="flex flex-col">
+              <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="Email" />
+            </label>
+            <label className="flex flex-col">
+              <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="Messaggio" ></textarea>
+            </label>
 
-      </div>
-
-      {/* Form */}
-      {errorMessage && (
-        <p className="text-red-600 font-semibold">{errorMessage}</p>
-      )}
-
-      {!submitted ? (
-        <form onSubmit={handleSubmit} className=" flex flex-col gap-4 ">
-          <p className="text-lg font-bold">
-            Compila il form, ti risponderò il prima possibile! </p>
-
-          <label className="flex flex-col">
-            <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="Nome" />
-          </label>
-          <label className="flex flex-col">
-            <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="Email" />
-          </label>
-          <label className="flex flex-col">
-            <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="Messaggio" ></textarea>
-          </label>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="p-4 gap-2 h-10 rounded-xl 
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="p-4 gap-2 h-10 rounded-xl 
                    bg-[var(--color-verdolight)] text-white text-lg font-semibold
                    flex items-center justify-center
                    hover:bg-[var(--color-verdoscuro)]
                    transition-colors transform transition-transform duration-150 
                    active:scale-70 hover:scale-120 w-auto"
-            >
-              Invia
-            </button>
-          </div>
-        </form>
-      ) : (
-        <p>Grazie per il messaggio!</p>
-      )}
+              >
+                Invia
+              </button>
+            </div>
+
+          </form>
+        ) : (
+          <p>Grazie per il messaggio!</p>
+        )}
+
+
+        {/* Contatti */}
+        <div className="flex flex-col gap-6 mb-12">
+          <a
+            href="mailto:francescagandelli.photographer@gmail.com"
+            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+          >
+            <EnvelopeOpen size={32} weight="duotone" color="#8CA576" />
+            <span className="text-black text-lg">francescagandelli.ph@gmail.com</span>
+          </a>
+
+          <a
+            href="tel:+393466106008"
+            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+          >
+            <PhoneCall size={32} weight="duotone" color="#8CA576" />
+            <span className="text-black text-lg">+39 346 610 6008</span>
+          </a>
+
+          <a
+            href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+          >
+            <InstagramLogo size={40} weight="duotone" color="#8CA576" />
+            <span className="text-black text-lg">Instagram @francescagandelli_ph</span>
+          </a>
+        </div>
+
+      </div>
     </section>
 
   );

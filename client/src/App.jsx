@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import logo from "./assets/images/logo.png";
-import { List } from "phosphor-react";
-import { InstagramLogo } from "phosphor-react";
-import { Envelope } from "phosphor-react";
+import { List, InstagramLogo, Envelope, EnvelopeOpen, PhoneCall } from "phosphor-react";
 
 // Pagine
 import Home from "./pages/Home";
@@ -65,13 +63,26 @@ const App = () => {
             <Link to="/family" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Gallery</Link>
             <Link to="/about" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Chi Sono</Link>
             <Link to="/contact" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Contatti</Link>
-            <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
-              target="_blank" //apre il link in una nuova scheda
-              rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
-              className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200 text-[var(--color-verdoscuro)]">
-              <InstagramLogo size={40} weight="duotone" />
-            </a>
+            <div className="flex flex-row">
+              <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
+                target="_blank" //apre il link in una nuova scheda
+                rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
+                className="icon-menu">
+                <InstagramLogo size={40} weight="duotone" />
+              </a>
+
+              <a href="mailto:francescagandelli.photographer@gmail.com"
+                className="icon-menu">
+                <EnvelopeOpen size={40} weight="duotone" />
+              </a>
+              <a
+                href="tel:+393466106008"
+                className="icon-menu">
+                <PhoneCall size={40} weight="duotone" />
+              </a>
+            </div>
           </div>
+
         </div>
       )}
 
@@ -97,7 +108,7 @@ const App = () => {
       </Routes>
 
       {/* FOOTER */}
-      <footer className="mt-auto p-6 text-center text-[0.625rem] text-white bg-[var(--color-verdolight)]">
+      <footer className="mt-auto p-6 text-center text-white bg-[var(--color-verdolight)]">
         <div>
           <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
             target="_blank" //apre il link in una nuova scheda
@@ -110,12 +121,13 @@ const App = () => {
             <Envelope size={40} weight="duotone" />
           </a>
         </div>
-        <div>
+        <div className="w-19/20 h-px bg-white my-6 mx-auto rounded-full"></div>
+        <div className="text-xs my-3">
           <Link to="/privacy-policy" className="hover:underline mx-2">Privacy Policy</Link> |
           <Link to="/cookie-policy" className="hover:underline mx-2">Cookie Policy</Link> |
           <Link to="/terms-of-service" className="hover:underline mx-2">Termini di Servizio</Link>
         </div>
-        <p>Tutti i testi, le immagini e i contenuti presenti su questo sito sono protetti.
+        <p className="text-xs">Tutti i testi, le immagini e i contenuti presenti su questo sito sono protetti.
           È vietato qualunque utilizzo senza il consenso scritto dell'autore.
           © 2026 Francesca Gandelli. Tutti i diritti riservati.</p>
       </footer>
