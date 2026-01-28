@@ -19,8 +19,6 @@ const Navbar = () => {
                 <Link to="/">
                     <img src={logo} alt="Logo" className="w-48 h-auto cursor-pointer" />
                 </Link>
-          
-                {isAdmin && <button onClick={handleLogout}>Logout</button>}
 
                 {/* Desktop */}
                 <div className="hidden md:flex gap-4">
@@ -41,6 +39,8 @@ const Navbar = () => {
 
                     </button>
                 </div>
+
+                {isAdmin && <button onClick={handleLogout} className="btn-primary">Logout</button>}
             </nav>
 
             {/* Mobile Menu */}

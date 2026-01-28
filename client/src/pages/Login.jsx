@@ -114,9 +114,7 @@ const Login = () => {
                         )}
                 </div>
 
-                <button type="submit" className="mx-auto shadow-md rounded-xl p-2 bg-[var(--color-verdolight)] 
-            text-white w-32 hover:bg-[var(--color-verdoscuro)] active:bg-[var(--color-verdolight)] 
-            active:text-[var(--color-verdoscuro)] transition-colors">
+                <button type="submit" className="btn-primary w-32 mx-auto">
                     Accedi
                 </button>
 

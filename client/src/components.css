@@ -9,7 +9,7 @@
         p-4 gap-2 h-10 rounded-xl
         flex items-center justify-center
         transition-colors transition-transform duration-150
-        active:scale-75 hover:scale-110;
+        active:scale-95 hover:scale-110;
       
       background-color: var(--color-verdolight);
       color: white;
@@ -54,7 +54,7 @@
 
     /* Card per foto e album cliccabili */
     .card {
-      @apply flex flex-col shadow-md rounded-3xl 
+      @apply flex flex-col shadow-md rounded-2xl 
       overflow-hidden bg-white cursor-pointer 
       transition-all duration-300 ease-in-out
     }
