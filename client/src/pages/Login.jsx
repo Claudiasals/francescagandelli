@@ -39,7 +39,7 @@ const Login = () => {
                 localStorage.setItem("adminToken", data.token);
 
                 // Redirect alla dashboard admin
-                window.location.href = "/dashboard";
+                window.location.href = "/";
                 /* Importante: la dashboard deve leggere il token 
                 dal localStorage per capire se l’utente è loggato.
                 */
