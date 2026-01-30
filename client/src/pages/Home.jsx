@@ -151,7 +151,6 @@ const Home = () => {
       <section className="p-8 md:mt-15 mb-16">
 
         <div className=" flex gap-2 justify-between">
-          <h2 className=" text-3xl font-bold mb-6">Portfolio</h2>
 
           {isAdmin && (
           <div className="flex gap-2 p-2 justify-end">

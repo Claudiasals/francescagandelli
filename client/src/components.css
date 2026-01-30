@@ -5,8 +5,8 @@
     /* Bottone principale del sito */
     .btn-primary {
       @apply 
-        text-lg font-semibold
-        p-4 gap-2 h-10 rounded-xl
+        text-lg 
+        p-4 gap-2 h-10 
         flex items-center justify-center
         transition-colors transition-transform duration-150
         active:scale-95 hover:scale-110;
@@ -23,9 +23,9 @@
   
     /* Pulsanti navbar con effetto di hover */
     .btn-navbar {
-      @apply px-4 py-2 font-semibold
-             text-[var(--color-verdolight)] /* verde scuro */
-             hover:text-[var(--color-verdoscuro)] /* verde scuro al passaggio */
+      @apply px-4 py-2 
+             text-[var(--color-verdoscuro)] /* verde scuro */
+             hover:text-[var(--color-verdolight)] /* verde scuro al passaggio */
              hover:scale-125 /* ingrandimento al passaggio del mouse */
              transition-transform transition-shadow duration-300 ease-in-out; /* aggiunta della transizione */
             }
@@ -54,7 +54,7 @@
 
     /* Card per foto e album cliccabili */
     .card {
-      @apply flex flex-col shadow-md rounded-2xl 
+      @apply flex flex-col shadow-md  
       overflow-hidden bg-white cursor-pointer 
       transition-all duration-300 ease-in-out
     }
@@ -66,7 +66,7 @@
   
     /* Titolo della card */
     .card-title {
-      @apply text-[var(--color-verdolight)] text-xl font-bold mb-2 text-center;
+      @apply text-[var(--color-verdoscuro)] text-xl mb-2 text-center;
     }
   
     /* Descrizione della card */

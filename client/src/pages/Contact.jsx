@@ -61,7 +61,7 @@ const Contact = () => {
     <section className="contact-section p-8 max-w-2xl mx-auto space-y-18">
 
       <div className="flex flex-col justify-center items-center gap-6  ">
-        <h2 className="text-3xl font-bold text-[var(--color-verdolight)] ">Contattami</h2>
+        <h2 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">Contattami</h2>
 
         <p className="text-lg">
           Se desideri prenotare una sessione fotografica o
@@ -80,17 +80,17 @@ const Contact = () => {
 
         {!submitted ? (
           <form onSubmit={handleSubmit} className=" flex flex-col gap-4 ">
-            <p className="text-lg font-bold">
+            <p className="text-lg">
               Compila il form, ti risponderò il prima possibile! </p>
 
             <label className="flex flex-col">
-              <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="Nome" />
+              <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="NOME" />
             </label>
             <label className="flex flex-col">
-              <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="Email" />
+              <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="EMAIL" />
             </label>
             <label className="flex flex-col">
-              <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="Messaggio" ></textarea>
+              <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="MESSAGGIO" ></textarea>
             </label>
 
             <div className="flex justify-end">
@@ -119,16 +119,14 @@ const Contact = () => {
             href="mailto:francescagandelli.photographer@gmail.com"
             className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
           >
-            <EnvelopeOpen size={32} weight="duotone" color="#8CA576" />
-            <span className="text-black text-lg">francescagandelli.ph@gmail.com</span>
+            <span className="text-black text-lg">email: francescagandelli.ph@gmail.com</span>
           </a>
 
           <a
             href="tel:+393466106008"
             className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
           >
-            <PhoneCall size={32} weight="duotone" color="#8CA576" />
-            <span className="text-black text-lg">+39 346 610 6008</span>
+            <span className="text-black text-lg">telefono: +39 346 610 6008</span>
           </a>
 
           <a
@@ -137,8 +135,7 @@ const Contact = () => {
             rel="noopener noreferrer"
             className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
           >
-            <InstagramLogo size={40} weight="duotone" color="#8CA576" />
-            <span className="text-black text-lg">Instagram @francescagandelli_ph</span>
+            <span className="text-black text-lg">Instagram: @francescagandelli_ph</span>
           </a>
         </div>
 

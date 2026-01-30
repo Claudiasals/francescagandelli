@@ -6,20 +6,20 @@ const Footer = () => {
 
     return (
         <>
-            <footer className="mt-auto p-6 text-center text-white bg-[var(--color-verdolight)]">
+            <footer className="mt-auto p-6 text-center">
                 <div>
                     <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
                         target="_blank" //apre il link in una nuova scheda
                         rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
                         className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
-                        <InstagramLogo size={40} weight="duotone" />
+                        <InstagramLogo size={30} />
                     </a>
                     <a href="mailto:francescagandelli.photographer@gmail.com"
                         className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
-                        <Envelope size={40} weight="duotone" />
+                        <Envelope size={30} />
                     </a>
                 </div>
-                <div className="w-19/20 h-px bg-white my-6 mx-auto rounded-full"></div>
+                <div className="w-19/20 h-px bg-black my-6 mx-auto rounded-full"></div>
                 <div className="text-xs my-3">
                     <Link to="/privacy-policy" className="hover:underline mx-2">Privacy Policy</Link> |
                     <Link to="/cookie-policy" className="hover:underline mx-2">Cookie Policy</Link> |

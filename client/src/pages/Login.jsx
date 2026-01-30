@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Lock, Eye, EyeClosed} from "phosphor-react";
+import { User, Lock, Eye, EyeClosed } from "phosphor-react";
 
 const Login = () => {
 
@@ -64,16 +64,15 @@ const Login = () => {
     return (
         <div className="flex flex-col p-6 gap-6 min-h-screen items-center justify-center">
 
-
             <form className="flex flex-col gap-6 " onSubmit={handleLogin}>
 
                 <div className="relative gap-2 items-center">
                     <input
                         className=" pl-12 border-2 border-[var(--color-verdolight)] 
-                rounded-xl p-2 bg-white focus:border-[var(--color-verdoscuro)] 
+                p-2 bg-white focus:border-[var(--color-verdoscuro)] 
                 outline-none peer"
                         type="text"
-                        placeholder="Username"
+                        placeholder="USERNAME"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
@@ -84,34 +83,34 @@ const Login = () => {
 
                 <div className="relative gap-2 items-center">
                     <input
-                        className=" pl-12 border-2 border-[var(--color-verdolight)] 
-                rounded-xl p-2 bg-white focus:border-[var(--color-verdoscuro)] 
+                        className="font-family pl-12 border-2 border-[var(--color-verdolight)] 
+                p-2 bg-white focus:border-[var(--color-verdoscuro)] 
                 outline-none peer"
                         // Aggiunta gestione mostra/nascondi password
                         type={showPassword ? "text" : "password"}
-                        placeholder="Password"
+                        placeholder="PASSWORD"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Lock size={32} weight="duotone"
                         className="absolute left-3 top-1/2 -translate-y-1/2 
                         text-[#8CA576] peer-focus:text-[var(--color-verdoscuro)]" />
-                   
+
                     {showPassword ? (
                         <EyeClosed
-                            size={24} weight="bold"
+                            size={24} weight="duotone"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
                text-[#8CA576] cursor-pointer 
                hover:text-[var(--color-verdoscuro)] transition-colors"
                             onClick={() => setShowPassword(false)}
                         />
                     ) : (
-                        <Eye size={24} weight="bold"
+                        <Eye size={24} weight="duotone"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
                     text-[#8CA576] cursor-pointer 
                     hover:text-[var(--color-verdoscuro)] transition-colors"
                             onClick={() => setShowPassword(true)} /> // icona per mostrare
-                        )}
+                    )}
                 </div>
 
                 <button type="submit" className="btn-primary w-32 mx-auto">

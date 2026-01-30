@@ -1,6 +1,3 @@
-import logo from "../assets/images/logo-francesca-gandelli5.png";
-import logo2 from "../assets/images/logo-francesca-gandelli6.png";
-
 import { List, InstagramLogo, EnvelopeOpen, PhoneCall } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -19,17 +16,15 @@ const Navbar = () => {
             {/* NAVBAR */}
             <nav className="sticky top-0 z-50 bg-white flex justify-between items-center py-1 px-6 shadow">
                 <Link to="/" className="flex items-center gap-2">
-                    <img src={logo} alt="Logo" className="w-30 h-auto cursor-pointer" />
-                    <img src={logo2} alt="Logo2" className="w-58 h-auto cursor-pointer" />
-                </Link>
+                    <h1 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
+                        FRANCESCA GANDELLI
+                    </h1>                </Link>
 
                 {/* Desktop */}
                 <div className="hidden md:flex gap-4">
-                    <Link to="/" className="btn-navbar">Home</Link>
-                    <Link to="/family" className="btn-navbar">Gallery</Link>
+                    <Link to="/" className="btn-navbar">Photografy</Link>
                     <Link to="/about" className="btn-navbar">Chi Sono</Link>
                     <Link to="/contact" className="btn-navbar">Contatti</Link>
-
                 </div>
 
                 {/* Mobile Hamburger */}
@@ -38,7 +33,7 @@ const Navbar = () => {
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="btn-navbar"
                     >
-                        <List size={32} color="#8CA576" weight="bold" />
+                        <List size={32} color="#1E431D"  />
 
                     </button>
                 </div>
@@ -60,8 +55,7 @@ const Navbar = () => {
                 <div className="md:hidden fixed left-0 right-0 bg-white shadow-md z-40"
                     style={{ top: "calc(3.5rem)" /* altezza navbar */ }}>
                     <div className="flex flex-col items-center space-y-2 py-2">
-                        <Link to="/" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Home</Link>
-                        <Link to="/family" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Gallery</Link>
+                        <Link to="/" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Photografy</Link>
                         <Link to="/about" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Chi Sono</Link>
                         <Link to="/contact" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Contatti</Link>
                         <div className="flex flex-row">
@@ -69,17 +63,17 @@ const Navbar = () => {
                                 target="_blank" //apre il link in una nuova scheda
                                 rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
                                 className="icon-menu">
-                                <InstagramLogo size={40} weight="duotone" />
+                                <InstagramLogo size={30} />
                             </a>
 
                             <a href="mailto:francescagandelli.photographer@gmail.com"
                                 className="icon-menu">
-                                <EnvelopeOpen size={40} weight="duotone" />
+                                <EnvelopeOpen size={30} />
                             </a>
                             <a
                                 href="tel:+393466106008"
                                 className="icon-menu">
-                                <PhoneCall size={40} weight="duotone" />
+                                <PhoneCall size={30} />
                             </a>
                         </div>
                     </div>
