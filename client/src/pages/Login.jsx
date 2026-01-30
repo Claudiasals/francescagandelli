@@ -98,7 +98,7 @@ const Login = () => {
                         text-[#8CA576] peer-focus:text-[var(--color-verdoscuro)]" />
                    
                     {showPassword ? (
-                        <Eye
+                        <EyeClosed
                             size={24} weight="bold"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
                text-[#8CA576] cursor-pointer 
@@ -106,7 +106,7 @@ const Login = () => {
                             onClick={() => setShowPassword(false)}
                         />
                     ) : (
-                        <EyeClosed size={24} weight="bold"
+                        <Eye size={24} weight="bold"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
                     text-[#8CA576] cursor-pointer 
                     hover:text-[var(--color-verdoscuro)] transition-colors"

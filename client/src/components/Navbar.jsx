@@ -1,4 +1,6 @@
-import logo from "../assets/images/logo-generico.png";
+import logo from "../assets/images/logo-francesca-gandelli5.png";
+import logo2 from "../assets/images/logo-francesca-gandelli6.png";
+
 import { List, InstagramLogo, EnvelopeOpen, PhoneCall } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -15,9 +17,10 @@ const Navbar = () => {
     return (
         <>
             {/* NAVBAR */}
-            <nav className="sticky top-0 z-50 bg-white flex justify-between items-center py-2 px-6 shadow">
-                <Link to="/">
-                    <img src={logo} alt="Logo" className="w-48 h-auto cursor-pointer" />
+            <nav className="sticky top-0 z-50 bg-white flex justify-between items-center py-1 px-6 shadow">
+                <Link to="/" className="flex items-center gap-2">
+                    <img src={logo} alt="Logo" className="w-30 h-auto cursor-pointer" />
+                    <img src={logo2} alt="Logo2" className="w-58 h-auto cursor-pointer" />
                 </Link>
 
                 {/* Desktop */}
@@ -42,6 +45,15 @@ const Navbar = () => {
 
                 {isAdmin && <button onClick={handleLogout} className="btn-primary">Logout</button>}
             </nav>
+
+
+            {/* OVERLAY cliccabile */}
+            {isMenuOpen && (
+                <div
+                    className="fixed inset-0 z-30"
+                    onClick={() => setIsMenuOpen(false)}
+                />
+            )}
 
             {/* Mobile Menu */}
             {isMenuOpen && (
@@ -71,12 +83,8 @@ const Navbar = () => {
                             </a>
                         </div>
                     </div>
-
                 </div>
             )}
-
-
-
         </>
     );
 };
