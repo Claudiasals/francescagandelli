@@ -60,10 +60,10 @@ const Contact = () => {
 
     <section className="contact-section p-8 max-w-2xl mx-auto space-y-18">
 
-      <div className="flex flex-col justify-center items-center gap-6  ">
+      <div className="flex flex-col justify-center gap-6  ">
         <h2 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">Contattami</h2>
 
-        <p className="text-lg">
+        <p className="font-display font-extralight tracking-widest uppercase ">
           Se desideri prenotare una sessione fotografica o
           discutere di un progetto, non esitare a contattarmi!
           Sarò felice di rispondere a tutte le tue domande e
@@ -71,7 +71,7 @@ const Contact = () => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-18">
+      <div className="flex flex-col gap-16">
 
         {/* Form */}
         {errorMessage && (
@@ -79,8 +79,8 @@ const Contact = () => {
         )}
 
         {!submitted ? (
-          <form onSubmit={handleSubmit} className=" flex flex-col gap-4 ">
-            <p className="text-lg">
+          <form onSubmit={handleSubmit} className=" flex flex-col gap-4">
+            <p className="text-lg text-verdoscuro">
               Compila il form, ti risponderò il prima possibile! </p>
 
             <label className="flex flex-col">
@@ -89,19 +89,14 @@ const Contact = () => {
             <label className="flex flex-col">
               <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="EMAIL" />
             </label>
-            <label className="flex flex-col">
+            <label className=" flex flex-col">
               <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="MESSAGGIO" ></textarea>
             </label>
 
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="p-4 gap-2 h-10 rounded-xl 
-                   bg-[var(--color-verdolight)] text-white text-lg font-semibold
-                   flex items-center justify-center
-                   hover:bg-[var(--color-verdoscuro)]
-                   transition-colors transform transition-transform duration-150 
-                   active:scale-70 hover:scale-120 w-auto"
+                className="btn-primary"
               >
                 Invia
               </button>
@@ -114,17 +109,17 @@ const Contact = () => {
 
 
         {/* Contatti */}
-        <div className="flex flex-col gap-6 mb-12">
+        <div className="flex flex-col gap-2 mb-12">
           <a
             href="mailto:francescagandelli.photographer@gmail.com"
-            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
           >
             <span className="text-black text-lg">email: francescagandelli.ph@gmail.com</span>
           </a>
 
           <a
             href="tel:+393466106008"
-            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
           >
             <span className="text-black text-lg">telefono: +39 346 610 6008</span>
           </a>
@@ -133,7 +128,7 @@ const Contact = () => {
             href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
           >
             <span className="text-black text-lg">Instagram: @francescagandelli_ph</span>
           </a>

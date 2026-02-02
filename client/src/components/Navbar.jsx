@@ -1,4 +1,4 @@
-import { List, InstagramLogo, EnvelopeOpen, PhoneCall } from "phosphor-react";
+import { List, InstagramLogo, EnvelopeOpen, PhoneCall, SignOut } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ const Navbar = () => {
 
                 {/* Desktop */}
                 <div className="hidden md:flex gap-4">
-                    <Link to="/" className="btn-navbar">Photografy</Link>
+                    <Link to="/" className="btn-navbar">Photography</Link>
                     <Link to="/about" className="btn-navbar">Chi Sono</Link>
                     <Link to="/contact" className="btn-navbar">Contatti</Link>
                 </div>
@@ -38,7 +38,12 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {isAdmin && <button onClick={handleLogout} className="btn-primary">Logout</button>}
+                {isAdmin && <button onClick={handleLogout} className="underline underline-offset-4 
+                   text-[var(--color-verdoscuro)] 
+                   flex items-center justify-center
+                   hover:text-[var(--color-verdolight)]
+                   transition-colors transform transition-transform duration-150 
+                   active:scale-70 hover:scale-120 w-auto"><SignOut size={26} /></button>}
             </nav>
 
 

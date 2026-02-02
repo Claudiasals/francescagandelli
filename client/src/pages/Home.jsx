@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Card from "../components/Card";
-import { Pencil, Trash, ArrowsClockwise, Plus, Check } from "phosphor-react";
+import { Pencil, Trash, ArrowsClockwise, Plus } from "phosphor-react";
 import { useEffect } from "react";
 
 
@@ -142,7 +142,7 @@ const Home = () => {
         )}
 
 
-        {/* coverUrl = verità dal backend
+        {/* coverUrl = dal backend
         preview = solo anteprima temporanea
         cover.png = solo fallback */}
 
@@ -159,13 +159,13 @@ const Home = () => {
               className="btn-edit-gallery"
             >
               <Pencil
-                size={24}
+                size={22}
                 className="text-white"
               />
             </button>
             <button type="button"
               className="btn-edit-gallery" >
-              <ArrowsClockwise size={24} className="text-white" />
+              <ArrowsClockwise size={22} className="text-white" />
             </button>
             <button type="button"
               className="btn-edit-gallery" >
@@ -176,31 +176,28 @@ const Home = () => {
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
           {categories.map(cat => (
             <Card key={cat.id} {...cat} />
           ))}
         </div>
-      </section>
 
-      {isAdmin && (
-      <div className=" flex gap-2 p-2 justify-end m-2">
+        {isAdmin && (
+      <div className=" flex justify-end">
         <button
           type="button"
-          className="btn-primary"
+          className="btn-primary mt-6"
           onClick={handleSaveCover}
         >
-          <span className="text-white font-semibold">
+          <span>
             {isSaved ? "Salvato" : "Salva"}
           </span>
-          <Check
-            size={24}
-            className="text-white"
-            weight="bold"
-          />
         </button>
       </div>
       )}
+      </section>
+
+      
 
     </>
   );

@@ -68,23 +68,23 @@ const Login = () => {
 
                 <div className="relative gap-2 items-center">
                     <input
-                        className=" pl-12 border-2 border-[var(--color-verdolight)] 
-                p-2 bg-white focus:border-[var(--color-verdoscuro)] 
+                        className=" pl-12 border border-[var(--color-verdoscuro)] 
+                p-2 bg-white focus:border-[var(--color-verdolight)] 
                 outline-none peer"
                         type="text"
                         placeholder="USERNAME"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
-                    <User size={32} weight="duotone"
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8CA576] 
-                    peer-focus:text-[var(--color-verdoscuro)]" />
+                    <User size={26}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1E431D] 
+                    peer-focus:text-[var(--color-verdolight)]" />
                 </div>
 
                 <div className="relative gap-2 items-center">
                     <input
-                        className="font-family pl-12 border-2 border-[var(--color-verdolight)] 
-                p-2 bg-white focus:border-[var(--color-verdoscuro)] 
+                        className="font-family pl-12 border border-[var(--color-verdoscuro)] 
+                p-2 bg-white focus:border-[var(--color-verdolight)] 
                 outline-none peer"
                         // Aggiunta gestione mostra/nascondi password
                         type={showPassword ? "text" : "password"}
@@ -92,28 +92,34 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Lock size={32} weight="duotone"
+                    <Lock size={26}
                         className="absolute left-3 top-1/2 -translate-y-1/2 
-                        text-[#8CA576] peer-focus:text-[var(--color-verdoscuro)]" />
+                        text-[#1E431D] peer-focus:text-[var(--color-verdolight)]" />
 
                     {showPassword ? (
                         <EyeClosed
-                            size={24} weight="duotone"
+                            size={22} weight="duotone"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
-               text-[#8CA576] cursor-pointer 
-               hover:text-[var(--color-verdoscuro)] transition-colors"
+               text-[#1E431D] cursor-pointer 
+               peer-focus:text-[var(--color-verdolight)] 
+                                   "
                             onClick={() => setShowPassword(false)}
                         />
                     ) : (
-                        <Eye size={24} weight="duotone"
+                        <Eye size={22} weight="duotone"
                             className="absolute right-3 top-1/2 -translate-y-1/2 
-                    text-[#8CA576] cursor-pointer 
-                    hover:text-[var(--color-verdoscuro)] transition-colors"
+                    text-[#1E431D] cursor-pointer peer-focus:text-[var(--color-verdolight)]
+                   "
                             onClick={() => setShowPassword(true)} /> // icona per mostrare
                     )}
                 </div>
 
-                <button type="submit" className="btn-primary w-32 mx-auto">
+                <button type="submit" className="underline underline-offset-4 p-4 gap-2 h-10 
+                   text-[var(--color-verdoscuro)] text-lg
+                   flex items-center justify-center
+                   hover:text-[var(--color-verdolight)]
+                   transition-colors transform transition-transform duration-150 
+                   active:scale-70 hover:scale-120 w-auto">
                     Accedi
                 </button>
 

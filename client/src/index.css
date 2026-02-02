@@ -14,5 +14,8 @@
 
 body, textarea, select, button {
   font-family: 'Raleway', sans-serif;
-  @apply uppercase;
+  @apply font-extralight tracking-widest uppercase;}
+
+input, textarea {
+  text-transform: none;
 }
