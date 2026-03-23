@@ -210,6 +210,7 @@ const Home = () => {
 
           {isAdmin && (
             <div className="flex gap-2 p-2 justify-end">
+
               <button
                 type="button"
                 className="btn-edit-gallery"
@@ -220,93 +221,100 @@ const Home = () => {
                   className="text-white"
                 />
               </button>
+
               <button type="button"
                 className="btn-edit-gallery" >
                 <ArrowsClockwise size={22} className="text-white" />
               </button>
+
               <button type="button"
                 className="btn-edit-gallery"
                 onClick={() => setShowCategoryForm(true)}
               >
                 <Plus size={24} className="text-white" />
               </button>
+
             </div>
           )}
 
         </div>
 
-        {showCategoryForm && (
-          <div
-            className={`
+
+
+        {/* GRIGLIA FORM ADD CATEGORY */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+
+          {showCategoryForm && (
+            <div
+              className={`
       card cursor-pointer
       transform transition-transform duration-200 ease-in-out
       hover:scale-105 scale-100
       flex flex-col
     `}
-          >
-            {/* Immagine / placeholder */}
-            <label className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
-              {categoryImage ? (
-                <img
-                  src={URL.createObjectURL(categoryImage)}
-                  alt="Anteprima"
-                  className="w-full h-full object-cover"
+            >
+              {/* Immagine / placeholder */}
+              <label className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
+                {categoryImage ? (
+                  <img
+                    src={URL.createObjectURL(categoryImage)}
+                    alt="Anteprima"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-gray-600 text-center text-sm">Carica immagine</span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => setCategoryImage(e.target.files[0])}
                 />
-              ) : (
-                <span className="text-gray-600 text-center text-sm">Carica immagine</span>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => setCategoryImage(e.target.files[0])}
-              />
-            </label>
+              </label>
 
-            {/* Contenuto centrato */}
-            <div className="flex-1 flex flex-col items-center justify-center bg-white p-4 text-center gap-2">
-              <input
-                type="text"
-                placeholder="Titolo"
-                value={categoryTitle}
-                onChange={(e) => setCategoryTitle(e.target.value)}
-                className="outline-none text-lg text-center w-full"
-              />
-              <textarea
-                placeholder="Descrizione"
-                value={categoryDescription}
-                onChange={(e) => setCategoryDescription(e.target.value)}
-                className="outline-none text-sm text-center w-full resize-none"
-              />
+              {/* Contenuto centrato */}
+              <div className="flex-1 flex flex-col items-center justify-center bg-white p-4 text-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Titolo"
+                  value={categoryTitle}
+                  onChange={(e) => setCategoryTitle(e.target.value)}
+                  className="outline-none text-lg text-center w-full"
+                />
+                <textarea
+                  placeholder="Descrizione"
+                  value={categoryDescription}
+                  onChange={(e) => setCategoryDescription(e.target.value)}
+                  className="outline-none text-sm text-center w-full resize-none"
+                />
 
-              <div className="flex gap-2 mt-2 w-full">
-                <button
-                  type="button"
-                  className="btn-primary flex-1"
-                  onClick={(e) => {
-                    e.stopPropagation(); // importante se sei dentro una card clickabile
-                    handleCreateCategory();
-                  }}
-                >
-                  Salva
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary flex-1"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowCategoryForm(false);
-                  }}
-                >
-                  Annulla
-                </button>
+                <div className="flex gap-2 mt-2 w-full">
+                  <button
+                    type="button"
+                    className="btn-primary flex-1"
+                    onClick={(e) => {
+                      e.stopPropagation(); // importante se sei dentro una card cliccabile
+                      handleCreateCategory();
+                    }}
+                  >
+                    Salva
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn-secondary flex-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowCategoryForm(false);
+                    }}
+                  >
+                    Annulla
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* GRIGLIA FORM ADD CATEGORY */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
           {categories.map(cat => (
             <Card key={cat.id} {...cat} />
           ))}
