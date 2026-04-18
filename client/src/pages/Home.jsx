@@ -119,7 +119,6 @@ const Home = () => {
     resetForm();
     setFormMode("create");
     setShowForm(true);
-    setEditMode(false);
     setReorderMode(false);
   };
 
@@ -133,6 +132,13 @@ const Home = () => {
     setEditingImageUrl(cat.imageUrl || null);
     setCategorySlug("");
     setShowForm(true);
+    setReorderMode(false);
+  };
+
+  /** Esci dalla modalità modifica: nasconde matite/cestini su tutte le card e chiude eventuale form aperto. */
+  const finishEditSession = () => {
+    resetForm();
+    setShowForm(false);
     setEditMode(false);
     setReorderMode(false);
   };
@@ -275,7 +281,10 @@ const Home = () => {
   };
 
   const toggleEditMode = () => {
-    setEditMode((e) => !e);
+    setEditMode((e) => {
+      if (e) resetForm();
+      return !e;
+    });
     setReorderMode(false);
     setShowForm(false);
   };
@@ -317,33 +326,46 @@ const Home = () => {
       <section className="px-8 pb-8 pt-[22px] md:mt-15 mb-16">
         <div className="flex flex-col gap-2">
           {isAdmin && (
-            <div className="flex flex-wrap gap-2 justify-end items-center">
-              <button
-                type="button"
-                className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
-                onClick={toggleEditMode}
-                title="Modifica"
-              >
-                <Pencil size={22} className="text-white" />
-              </button>
+            <div className="flex flex-col gap-2 items-end">
+              <div className="flex flex-wrap gap-2 justify-end items-center">
+                <button
+                  type="button"
+                  className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
+                  onClick={toggleEditMode}
+                  title="Attiva o disattiva modifica sulle card"
+                >
+                  <Pencil size={22} className="text-white" />
+                </button>
 
-              <button
-                type="button"
-                className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
-                onClick={toggleReorderMode}
-                title="Trascina le card per riordinarle"
-              >
-                <ArrowsClockwise size={22} className="text-white" />
-              </button>
+                <button
+                  type="button"
+                  className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
+                  onClick={toggleReorderMode}
+                  title="Trascina le card per riordinarle"
+                >
+                  <ArrowsClockwise size={22} className="text-white" />
+                </button>
 
-              <button
-                type="button"
-                className="btn-edit-gallery"
-                onClick={openCreateForm}
-                title="Aggiungi una nuova categoria"
-              >
-                <Plus size={24} className="text-white" />
-              </button>
+                <button
+                  type="button"
+                  className="btn-edit-gallery"
+                  onClick={openCreateForm}
+                  title="Aggiungi una nuova categoria"
+                >
+                  <Plus size={24} className="text-white" />
+                </button>
+              </div>
+
+              {editMode && (
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={finishEditSession}
+                  title="Chiude la modifica su tutte le card: puoi modificare più categorie prima di uscire"
+                >
+                  Salva pagina
+                </button>
+              )}
             </div>
           )}
 

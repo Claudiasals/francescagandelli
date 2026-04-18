@@ -453,7 +453,7 @@ const GalleryPage = () => {
       )}
 
       <div className="flex flex-wrap gap-4 justify-between items-start mb-6">
-        <h1 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
+        <h1 className="font-display font-extralight text-base tracking-widest uppercase text-verdoscuro">
           {loading ? "…" : title}
         </h1>
 
