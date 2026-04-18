@@ -112,25 +112,25 @@ const Contact = () => {
         <div className="flex flex-col gap-2 mb-12">
           <a
             href="mailto:francescagandelli.photographer@gmail.com"
-            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
           >
-            <span className="text-black text-lg">email: francescagandelli.ph@gmail.com</span>
+            email: francescagandelli.ph@gmail.com
           </a>
 
           <a
             href="tel:+393466106008"
-            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
           >
-            <span className="text-black text-lg">telefono: +39 346 610 6008</span>
+            telefono: +39 346 610 6008
           </a>
 
           <a
             href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col hover:scale-120 active:scale-75 transition-transform duration-200"
+            className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
           >
-            <span className="text-black text-lg">Instagram: @francescagandelli_ph</span>
+            Instagram: @francescagandelli_ph
           </a>
         </div>
 

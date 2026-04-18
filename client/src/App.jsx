@@ -12,6 +12,7 @@ import Family from "./pages/Family";
 import Portrait from "./pages/Portrait";
 import PersonalBranding from "./pages/PersonalBranding";
 import Storytelling from "./pages/Storytelling";
+import CategoryGallery from "./pages/CategoryGallery";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/portrait" element={<Portrait />} />
         <Route path="/personal-branding" element={<PersonalBranding />} />
         <Route path="/storytelling" element={<Storytelling />} />
+        <Route path="/gallery/:slug" element={<CategoryGallery />} />
 
         <Route path="/login" element={<Login />} />
 

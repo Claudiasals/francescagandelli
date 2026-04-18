@@ -42,8 +42,8 @@ const Navbar = () => {
                    text-[var(--color-verdoscuro)] 
                    flex items-center justify-center
                    hover:text-[var(--color-verdolight)]
-                   transition-colors transform transition-transform duration-150 
-                   active:scale-70 hover:scale-120 w-auto"><SignOut size={26} /></button>}
+                   transition-colors duration-150 
+                   w-auto"><SignOut size={26} /></button>}
             </nav>
 
 

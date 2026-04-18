@@ -118,8 +118,8 @@ const Login = () => {
                    text-[var(--color-verdoscuro)] text-lg
                    flex items-center justify-center
                    hover:text-[var(--color-verdolight)]
-                   transition-colors transform transition-transform duration-150 
-                   active:scale-70 hover:scale-120 w-auto">
+                   transition-colors duration-150 
+                   w-auto">
                     Accedi
                 </button>
 

@@ -11,11 +11,11 @@ const Footer = () => {
                     <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
                         target="_blank" //apre il link in una nuova scheda
                         rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
-                        className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
+                        className="icon-menu">
                         <InstagramLogo size={30} />
                     </a>
                     <a href="mailto:francescagandelli.photographer@gmail.com"
-                        className="mx-2 inline-block hover:scale-150 active:scale-95  transition-transform duration-200">
+                        className="icon-menu">
                         <Envelope size={30} />
                     </a>
                 </div>

@@ -10,6 +10,8 @@ import authRoutes from "./routes/authRoute.js";
 import cors from "cors";
 // rotta per copertina portfolio
 import coverRoutes from "./routes/coverRoute.js";
+import aboutRoutes from "./routes/aboutRoute.js";
+import categoryRoutes from "./routes/categoryRoute.js";
 // libreria email x form  
 import nodemailer from "nodemailer";  
 
@@ -84,6 +86,12 @@ app.get("/", (req, res) => {
 
 // Rotta per copertina
 app.use("/api", coverRoutes);
+
+// Chi Sono: testo e galleria immagini (GET pubblico, PUT/POST/DELETE admin)
+app.use("/api", aboutRoutes);
+
+// Categorie home (card portfolio)
+app.use("/api/categories", categoryRoutes);
 
 
 // Rotta per il form di contatto

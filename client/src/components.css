@@ -10,9 +10,18 @@
         text-[var(--color-verdoscuro)] text-lg
         flex items-center justify-center
         hover:text-[var(--color-verdolight)]
-        active:scale-95
-        transition-transform duration-150
-        hover:scale-110
+        transition-colors duration-150
+        w-auto;
+    }
+
+    .btn-secondary {
+      @apply 
+        underline underline-offset-4
+        p-4 gap-2 h-10
+        text-black text-lg
+        flex items-center justify-center
+        hover:text-[var(--color-verdolight)]
+        transition-colors duration-150
         w-auto;
     }
   
@@ -22,10 +31,9 @@
     /* Pulsanti navbar con effetto di hover */
     .btn-navbar {
       @apply px-4 py-2 
-             text-[var(--color-verdoscuro)] /* verde scuro */
-             hover:text-[var(--color-verdolight)] /* verde scuro al passaggio */
-             hover:scale-125 /* ingrandimento al passaggio del mouse */
-             transition-transform transition-shadow duration-300 ease-in-out; /* aggiunta della transizione */
+             text-[var(--color-verdoscuro)]
+             hover:text-[var(--color-verdolight)]
+             transition-colors duration-300 ease-in-out;
             }
   
 /* Pulsante circolare per dashboard */
@@ -36,8 +44,7 @@
           bg-[var(--color-verdolight)]
           flex items-center justify-center
           hover:bg-[var(--color-verdoscuro)]
-          transition-colors transition-transform duration-150
-          active:scale-75 hover:scale-110
+          transition-colors duration-150
           cursor-pointer;
       }
     }
@@ -45,9 +52,9 @@
     .icon-menu {
       @apply 
       text-[var(--color-verdoscuro)]
+      hover:text-[var(--color-verdolight)]
       mx-2 inline-block 
-      hover:scale-150 active:scale-95  
-      transition-transform duration-200 
+      transition-colors duration-200 
     }
 
     /* Card per foto e album cliccabili */
@@ -59,7 +66,7 @@
   
     /* Hover effect per card cliccabile */
     .card:hover {
-      @apply scale-105 shadow-2xl;
+      @apply shadow-2xl;
     }
   
     /* Titolo della card */
