@@ -1,23 +1,21 @@
 import { InstagramLogo, Envelope } from "phosphor-react";
 import { Link } from "react-router-dom";
+import EmailContactMenu from "./EmailContactMenu";
 
 
 const Footer = () => {
 
     return (
         <>
-            <footer className="mt-auto p-6 text-center">
-                <div>
+            <footer className="mt-auto p-6 text-center overflow-visible">
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                     <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
                         target="_blank" //apre il link in una nuova scheda
                         rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
                         className="icon-menu">
                         <InstagramLogo size={30} />
                     </a>
-                    <a href="mailto:francescagandelli.photographer@gmail.com"
-                        className="icon-menu">
-                        <Envelope size={30} />
-                    </a>
+                    <EmailContactMenu Icon={Envelope} iconSize={30} placement="footer" />
                 </div>
                 <div className="w-19/20 h-px bg-black my-6 mx-auto rounded-full"></div>
                 <div className="text-[10px] my-3">

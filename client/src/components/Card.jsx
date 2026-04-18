@@ -47,7 +47,7 @@ const Card = ({
               e.stopPropagation();
               onEdit?.();
             }}
-            title="Modifica categoria"
+            title="Modifica"
           >
             <Pencil size={18} className="text-white" />
           </button>

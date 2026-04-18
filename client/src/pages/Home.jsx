@@ -314,22 +314,22 @@ const Home = () => {
         )}
       </section>
 
-      <section className="p-8 md:mt-15 mb-16">
+      <section className="px-8 pb-8 pt-[22px] md:mt-15 mb-16">
         <div className="flex flex-col gap-2">
           {isAdmin && (
             <div className="flex flex-wrap gap-2 justify-end items-center">
               <button
                 type="button"
-                className={`btn-edit-gallery ${editMode ? "ring-2 ring-white ring-offset-2 ring-offset-[var(--color-verdoscuro)]" : ""}`}
+                className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
                 onClick={toggleEditMode}
-                title="Modifica o elimina una card (titolo, foto, testo)"
+                title="Modifica"
               >
                 <Pencil size={22} className="text-white" />
               </button>
 
               <button
                 type="button"
-                className={`btn-edit-gallery ${reorderMode ? "ring-2 ring-white ring-offset-2 ring-offset-[var(--color-verdoscuro)]" : ""}`}
+                className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
                 onClick={toggleReorderMode}
                 title="Trascina le card per riordinarle"
               >
@@ -354,7 +354,7 @@ const Home = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[9px]">
           {showForm && (
             <div className="card flex flex-col transition-shadow duration-200 ease-in-out">
               <label className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
@@ -416,7 +416,18 @@ const Home = () => {
                   />
                 )}
 
-                <div className="flex gap-2 mt-2 w-full">
+                <div className="flex flex-row gap-2 mt-2 w-full justify-between">
+                  <button
+                    type="button"
+                    className="btn-secondary flex-1"
+                    onClick={() => {
+                      resetForm();
+                      setShowForm(false);
+                    }}
+                  >
+                    Annulla
+                  </button>
+
                   <button
                     type="button"
                     className="btn-primary flex-1"
@@ -430,17 +441,6 @@ const Home = () => {
                     }
                   >
                     Salva
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn-secondary flex-1"
-                    onClick={() => {
-                      resetForm();
-                      setShowForm(false);
-                    }}
-                  >
-                    Annulla
                   </button>
                 </div>
               </div>

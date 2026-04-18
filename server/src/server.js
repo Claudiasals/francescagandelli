@@ -12,6 +12,7 @@ import cors from "cors";
 import coverRoutes from "./routes/coverRoute.js";
 import aboutRoutes from "./routes/aboutRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
+import galleryRoutes from "./routes/galleryRoute.js";
 // libreria email x form  
 import nodemailer from "nodemailer";  
 
@@ -92,6 +93,9 @@ app.use("/api", aboutRoutes);
 
 // Categorie home (card portfolio)
 app.use("/api/categories", categoryRoutes);
+
+// Foto per categoria (gallerie /family, /portrait, /gallery/:slug, …)
+app.use("/api/gallery", galleryRoutes);
 
 
 // Rotta per il form di contatto

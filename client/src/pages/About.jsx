@@ -94,9 +94,9 @@ const About = () => {
           <div className="flex gap-2 p-2 justify-end shrink-0">
             <button
               type="button"
-              className="btn-edit-gallery"
+              className={`btn-edit-gallery ${editing ? "btn-edit-gallery-active" : ""}`}
               onClick={toggleEdit}
-              title={editing ? "Chiudi modifica testo" : "Modifica testo"}
+              title={editing ? "Chiudi" : "Modifica"}
             >
               <Pencil size={22} className="text-white" />
             </button>

@@ -1,3 +1,5 @@
+import { PHOTOGRAPHER_EMAIL } from "../constants/contact.js";
+
 const PrivacyPolicy = () => {
     return (
       <section className="max-w-3xl mx-auto p-8 space-y-4">
@@ -16,7 +18,11 @@ const PrivacyPolicy = () => {
   
         <p>
           Hai il diritto di richiedere in qualsiasi momento l’accesso, la rettifica o la cancellazione
-          dei tuoi dati scrivendo a <a href="mailto:francescagandelli.photographer@gmail.com" className="hover:underline">francescagandelli.photographer@gmail.com</a>.
+          dei tuoi dati scrivendo a{" "}
+          <a href={`mailto:${PHOTOGRAPHER_EMAIL}`} className="hover:underline">
+            {PHOTOGRAPHER_EMAIL}
+          </a>
+          .
         </p>
   
         <p>Data aggiornamento: 27 gennaio 2026</p>

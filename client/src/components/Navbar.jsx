@@ -1,6 +1,7 @@
 import { List, InstagramLogo, EnvelopeOpen, PhoneCall, SignOut } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import EmailContactMenu from "./EmailContactMenu.jsx";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,10 +22,11 @@ const Navbar = () => {
                     </h1>                </Link>
 
                 {/* Desktop */}
-                <div className="hidden md:flex gap-4">
+                <div className="hidden md:flex items-center gap-4">
                     <Link to="/" className="btn-navbar">Photography</Link>
                     <Link to="/about" className="btn-navbar">Chi Sono</Link>
                     <Link to="/contact" className="btn-navbar">Contatti</Link>
+                    <EmailContactMenu Icon={EnvelopeOpen} iconSize={30} placement="nav" />
                 </div>
 
                 {/* Mobile Hamburger */}
@@ -57,13 +59,13 @@ const Navbar = () => {
 
             {/* Mobile Menu */}
             {isMenuOpen && (
-                <div className="md:hidden fixed left-0 right-0 bg-white shadow-md z-40"
+                <div className="md:hidden fixed left-0 right-0 overflow-visible bg-white shadow-md z-40"
                     style={{ top: "calc(3.5rem)" /* altezza navbar */ }}>
-                    <div className="flex flex-col items-center space-y-2 py-2">
+                    <div className="flex flex-col items-center space-y-2 overflow-visible py-2">
                         <Link to="/" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Photografy</Link>
                         <Link to="/about" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Chi Sono</Link>
                         <Link to="/contact" className="btn-navbar" onClick={() => setIsMenuOpen(false)}>Contatti</Link>
-                        <div className="flex flex-row">
+                        <div className="relative flex flex-row flex-wrap justify-center gap-1 overflow-visible py-1">
                             <a href="https://www.instagram.com/francescagandelli_ph?igsh=bWZ6anl2bTdtcXc1"
                                 target="_blank" //apre il link in una nuova scheda
                                 rel="noopener noreferrer" //noopener impedisce al sito esterno di accedere alla finestra del tuo sito, evita possibili attacchi
@@ -71,10 +73,12 @@ const Navbar = () => {
                                 <InstagramLogo size={30} />
                             </a>
 
-                            <a href="mailto:francescagandelli.photographer@gmail.com"
-                                className="icon-menu">
-                                <EnvelopeOpen size={30} />
-                            </a>
+                            <EmailContactMenu
+                                Icon={EnvelopeOpen}
+                                iconSize={30}
+                                placement="nav"
+                                onNavigate={() => setIsMenuOpen(false)}
+                            />
                             <a
                                 href="tel:+393466106008"
                                 className="icon-menu">

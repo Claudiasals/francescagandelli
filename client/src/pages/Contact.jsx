@@ -1,5 +1,6 @@
-import { PhoneCall, EnvelopeOpen, InstagramLogo } from "phosphor-react";
+import { PhoneCall, InstagramLogo } from "phosphor-react";
 import { useState } from "react";
+import { PHOTOGRAPHER_EMAIL } from "../constants/contact.js";
 
 
 const Contact = () => {
@@ -111,10 +112,10 @@ const Contact = () => {
         {/* Contatti */}
         <div className="flex flex-col gap-2 mb-12">
           <a
-            href="mailto:francescagandelli.photographer@gmail.com"
+            href={`mailto:${PHOTOGRAPHER_EMAIL}`}
             className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
           >
-            email: francescagandelli.ph@gmail.com
+            email: {PHOTOGRAPHER_EMAIL}
           </a>
 
           <a
