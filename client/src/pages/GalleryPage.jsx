@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Pencil, ArrowsClockwise, Plus, Trash, Check, CircleNotch, X } from "phosphor-react";
+import { lockBodyScroll, unlockBodyScroll } from "../utils/bodyScrollLock.js";
 
 const API = "http://localhost:5000/api/gallery";
 
@@ -40,6 +41,9 @@ const GalleryPage = () => {
   /** Feedback durante il riordino: cella sotto il cursore e foto trascinata. */
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const [draggingIndex, setDraggingIndex] = useState(null);
+
+  /** Anteprima a schermo intero (visitatori e admin fuori da modifica / riordino). */
+  const [lightbox, setLightbox] = useState(null);
 
   const loadGallery = useCallback(async () => {
     if (!slug) return;
@@ -93,6 +97,19 @@ const GalleryPage = () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    document.addEventListener("keydown", onKey);
+    lockBodyScroll();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      unlockBodyScroll();
+    };
+  }, [lightbox]);
 
   /** Clic su +: subito finestra di scelta file; dopo la scelta si apre il modale con anteprima e didascalia. */
   const openFilePicker = () => {
@@ -300,6 +317,8 @@ const GalleryPage = () => {
       dragOverIndex === index &&
       draggingIndex !== index;
 
+    const canOpenLightbox = !editMode && !reorderMode;
+
     return (
       <div
         key={photo._id}
@@ -331,12 +350,30 @@ const GalleryPage = () => {
         <div
           className={`w-full shadow-md ${
             showDropTarget ? "reorder-photo-glow overflow-hidden rounded-none" : "overflow-hidden"
-          }`}
+          } ${canOpenLightbox ? "cursor-pointer focus-within:ring-2 focus-within:ring-white/50" : ""}`}
+          role={canOpenLightbox ? "button" : undefined}
+          tabIndex={canOpenLightbox ? 0 : undefined}
+          aria-label={canOpenLightbox ? "Apri immagine a schermo intero" : undefined}
+          onClick={
+            canOpenLightbox
+              ? () => setLightbox({ imageUrl: photo.imageUrl, caption: photo.caption || "" })
+              : undefined
+          }
+          onKeyDown={
+            canOpenLightbox
+              ? (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setLightbox({ imageUrl: photo.imageUrl, caption: photo.caption || "" });
+                  }
+                }
+              : undefined
+          }
         >
           <img
             src={photo.imageUrl}
             alt={photo.caption || ""}
-            className="block h-auto w-full max-w-full align-top"
+            className="pointer-events-none block h-auto w-full max-w-full align-top select-none"
             loading="lazy"
             decoding="async"
             draggable={false}
@@ -383,6 +420,44 @@ const GalleryPage = () => {
 
   return (
     <section className="max-w-6xl mx-auto p-8 space-y-4">
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/90 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Immagine a schermo intero"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-black/40 text-white transition-colors hover:bg-black/60"
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightbox(null);
+            }}
+            title="Chiudi"
+            aria-label="Chiudi"
+          >
+            <X size={22} weight="bold" />
+          </button>
+          <div
+            className="flex max-h-[85vh] w-full flex-1 items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightbox.imageUrl}
+              alt={lightbox.caption?.trim() ? lightbox.caption.trim() : "Foto galleria"}
+              className="max-h-[85vh] max-w-full object-contain"
+            />
+          </div>
+          {lightbox.caption?.trim() ? (
+            <p className="mt-4 max-w-3xl text-center text-sm font-extralight uppercase tracking-wide text-white">
+              {lightbox.caption.trim()}
+            </p>
+          ) : null}
+        </div>
+      )}
+
       {isAdmin && (
         <input
           ref={uploadFileInputRef}
