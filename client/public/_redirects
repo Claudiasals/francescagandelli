@@ -1,0 +1,2 @@
+# SPA (React Router): ogni percorso resta sull'URL richiesto ma viene servito index.html
+/*    /index.html   200
