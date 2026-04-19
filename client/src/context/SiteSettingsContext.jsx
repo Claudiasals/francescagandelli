@@ -1,0 +1,48 @@
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { DEFAULT_SITE_CONTACT } from "../constants/contact.js";
+
+const API = "http://localhost:5000/api";
+
+const SiteSettingsContext = createContext({
+  ...DEFAULT_SITE_CONTACT,
+  loading: true,
+  refresh: () => {},
+});
+
+export function SiteSettingsProvider({ children }) {
+  const [settings, setSettings] = useState({ ...DEFAULT_SITE_CONTACT });
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/site-settings`);
+      const data = await res.json();
+      setSettings({
+        publicEmail: data.publicEmail ?? DEFAULT_SITE_CONTACT.publicEmail,
+        instagramUrl: data.instagramUrl ?? DEFAULT_SITE_CONTACT.instagramUrl,
+        phoneTel: data.phoneTel ?? DEFAULT_SITE_CONTACT.phoneTel,
+        phoneDisplay: data.phoneDisplay ?? DEFAULT_SITE_CONTACT.phoneDisplay,
+      });
+    } catch (e) {
+      console.error("Site settings", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const value = {
+    ...settings,
+    loading,
+    refresh,
+  };
+
+  return <SiteSettingsContext.Provider value={value}>{children}</SiteSettingsContext.Provider>;
+}
+
+export function useSiteSettings() {
+  return useContext(SiteSettingsContext);
+}

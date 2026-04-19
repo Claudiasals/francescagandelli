@@ -1,9 +1,11 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { SiteSettingsProvider } from "./context/SiteSettingsContext.jsx";
 
 // Pagine
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Footer from "./components/Footer";
+import CookieConsentBanner from "./components/CookieConsentBanner.jsx";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -12,12 +14,13 @@ import GalleryPage from "./pages/GalleryPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Settings from "./pages/Settings";
 
 
 const App = () => {
 
   return (
-
+    <SiteSettingsProvider>
     <main className="flex flex-col min-h-screen font-sans text-[var(--color-black)] bg-[var(--color-white)]">
 
       <Navbar/>
@@ -34,6 +37,7 @@ const App = () => {
         <Route path="/gallery/:slug" element={<GalleryPage />} />
 
         <Route path="/login" element={<Login />} />
+        <Route path="/settings" element={<Settings />} />
 
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/cookie-policy" element={<CookiePolicy />} />
@@ -44,7 +48,10 @@ const App = () => {
 
       <Footer />
 
+      <CookieConsentBanner />
+
     </main>
+    </SiteSettingsProvider>
   );
 };
 

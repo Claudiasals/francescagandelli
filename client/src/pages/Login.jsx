@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { User, Lock, Eye, EyeClosed } from "phosphor-react";
+import { Link } from "react-router-dom";
+import { User, Lock, Eye, EyeClosed, Wrench } from "phosphor-react";
 
 const Login = () => {
 
@@ -114,14 +115,21 @@ const Login = () => {
                     )}
                 </div>
 
-                <button type="submit" className="underline underline-offset-4 p-4 gap-2 h-10 
-                   text-[var(--color-verdoscuro)] text-lg
-                   flex items-center justify-center
-                   hover:text-[var(--color-verdolight)]
-                   transition-colors duration-150 
-                   w-auto">
-                    Accedi
-                </button>
+                <div className="flex flex-row items-center justify-center gap-4 w-full max-w-md">
+                    {!!localStorage.getItem("adminToken") && (
+                        <Link
+                            to="/settings"
+                            className="btn-edit-gallery shrink-0"
+                            title="Impostazioni"
+                            aria-label="Impostazioni"
+                        >
+                            <Wrench size={20} weight="duotone" className="text-white" />
+                        </Link>
+                    )}
+                    <button type="submit" className="btn-primary flex-1 sm:flex-initial min-w-0">
+                        Accedi
+                    </button>
+                </div>
 
             </form>
 

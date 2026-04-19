@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pencil } from "phosphor-react";
+import EditablePageText from "../components/EditablePageText.jsx";
 
 const API = "http://localhost:5000/api";
 
@@ -98,7 +99,7 @@ const About = () => {
               onClick={toggleEdit}
               title={editing ? "Chiudi" : "Modifica"}
             >
-              <Pencil size={22} className="text-white" />
+              <Pencil size={22} weight="duotone" className="text-white" />
             </button>
           </div>
         )}
@@ -109,12 +110,12 @@ const About = () => {
       ) : (
         <>
           {isAdmin && editing ? (
-            <div className="space-y-4">
-              <textarea
+            <div className="space-y-4 w-full">
+              <EditablePageText
                 value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                rows={14}
-                className={`w-full min-h-[14rem] resize-y border border-gray-300 rounded bg-transparent p-0 leading-relaxed outline-none focus:ring-1 focus:ring-[var(--color-verdolight)] ${aboutTextClassName}`}
+                onChange={setEditText}
+                className={`leading-relaxed ${aboutTextClassName}`}
+                aria-label="Testo Chi sono"
               />
               <div className="flex gap-4 justify-end">
                 <button type="button" className="btn-secondary" onClick={cancelEdit}>
@@ -126,7 +127,7 @@ const About = () => {
                   onClick={handleSaveText}
                   disabled={!textDirty}
                 >
-                  Salva testo
+                  SALVA
                 </button>
               </div>
             </div>

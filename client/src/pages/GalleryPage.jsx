@@ -247,9 +247,9 @@ const GalleryPage = () => {
     dragIndexRef.current = null;
     if (from === dropIndex) return;
 
+    /** Solo scambio tra due foto: nessuno “scivolamento” degli elementi in mezzo. */
     const next = [...photos];
-    const [removed] = next.splice(from, 1);
-    next.splice(dropIndex, 0, removed);
+    [next[from], next[dropIndex]] = [next[dropIndex], next[from]];
     setPhotos(next);
     persistReorder(next);
   };
@@ -311,17 +311,9 @@ const GalleryPage = () => {
         className={`relative flex min-w-0 w-full flex-col select-none transition-shadow duration-150 ${
           reorderMode && isAdmin ? "cursor-grab active:cursor-grabbing [&>*]:pointer-events-none" : ""
         } ${reorderMode && isAdmin && draggingIndex === index ? "opacity-50" : ""} ${
-          showDropTarget
-            ? "z-10 rounded-sm shadow-[0_0_0_3px_var(--color-verdoscuro),0_12px_40px_rgba(30,67,29,0.35)] ring-2 ring-[var(--color-verdoscuro)] ring-offset-2 ring-offset-white"
-            : ""
+          showDropTarget ? "z-10 overflow-visible" : ""
         }`}
       >
-        {showDropTarget && (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-1 left-0 right-0 z-30 h-1.5 rounded-sm bg-[var(--color-verdoscuro)] shadow-md"
-          />
-        )}
         {isAdmin && editMode && (
           <button
             type="button"
@@ -332,11 +324,15 @@ const GalleryPage = () => {
             }}
             title="Elimina la foto dalla galleria"
           >
-            <Trash size={20} className="text-white" />
+            <Trash size={20} weight="duotone" className="text-white" />
           </button>
         )}
 
-        <div className="w-full shadow-md">
+        <div
+          className={`w-full shadow-md ${
+            showDropTarget ? "reorder-photo-glow overflow-hidden rounded-none" : "overflow-hidden"
+          }`}
+        >
           <img
             src={photo.imageUrl}
             alt={photo.caption || ""}
@@ -466,7 +462,7 @@ const GalleryPage = () => {
                 onClick={toggleEditMode}
                 title="Modifica"
               >
-                <Pencil size={22} className="text-white" />
+                <Pencil size={22} weight="duotone" className="text-white" />
               </button>
 
               <button
@@ -479,7 +475,7 @@ const GalleryPage = () => {
               </button>
 
               <button type="button" className="btn-edit-gallery" onClick={openFilePicker} title="Aggiungi foto">
-                <Plus size={24} className="text-white" />
+                <Plus size={24} weight="duotone" className="text-white" />
               </button>
             </div>
             {editMode && photos.length > 0 && (
@@ -489,12 +485,12 @@ const GalleryPage = () => {
                 disabled={savingCaptions}
                 onClick={handleSaveAllCaptions}
               >
-                {savingCaptions ? "Salvataggio…" : "Salva"}
+                {savingCaptions ? "SALVATAGGIO…" : "SALVA"}
               </button>
             )}
             {reorderMode && (
               <button type="button" className="btn-primary" onClick={finishReorderMode}>
-                Salva
+                SALVA
               </button>
             )}
           </div>
@@ -503,8 +499,8 @@ const GalleryPage = () => {
 
       {isAdmin && reorderMode && (
         <p className="text-sm text-[var(--color-verdoscuro)] mb-4 text-right max-w-xl ml-auto leading-relaxed">
-          Modalità riordino: trascina una foto. La striscia e l’ombra verde sulla cella indicano dove verrà
-          posizionata quando rilasci.
+          Modalità riordino: trascina una foto e rilasciala su un’altra: le due si scambiano di posto (le altre
+          restano ferme). Un bordo verde da 4px intorno alla foto indica con quale avviene lo scambio.
         </p>
       )}
 

@@ -11,8 +11,13 @@ import cors from "cors";
 // rotta per copertina portfolio
 import coverRoutes from "./routes/coverRoute.js";
 import aboutRoutes from "./routes/aboutRoute.js";
+import contactPageRoutes from "./routes/contactPageRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
 import galleryRoutes from "./routes/galleryRoute.js";
+import siteSettingsRoutes from "./routes/siteSettingsRoute.js";
+import legalPagesRoutes from "./routes/legalPagesRoute.js";
+import SiteSettings from "./models/siteSettingsModel.js";
+import { DEFAULT_PUBLIC_EMAIL } from "./controllers/siteSettingsController.js";
 // libreria email x form  
 import nodemailer from "nodemailer";  
 
@@ -90,13 +95,15 @@ app.use("/api", coverRoutes);
 
 // Chi Sono: testo e galleria immagini (GET pubblico, PUT/POST/DELETE admin)
 app.use("/api", aboutRoutes);
+app.use("/api", contactPageRoutes);
+app.use("/api", legalPagesRoutes);
 
 // Categorie home (card portfolio)
 app.use("/api/categories", categoryRoutes);
 
 // Foto per categoria (gallerie /family, /portrait, /gallery/:slug, …)
 app.use("/api/gallery", galleryRoutes);
-
+app.use("/api", siteSettingsRoutes);
 
 // Rotta per il form di contatto
 app.post("/api/contact", async (req, res) => {
@@ -110,15 +117,20 @@ app.post("/api/contact", async (req, res) => {
   }
 
   try {
+    const settings = await SiteSettings.findOne();
+    const toEmail =
+      settings?.publicEmail?.trim() ||
+      process.env.CONTACT_MAIL_TO?.trim() ||
+      DEFAULT_PUBLIC_EMAIL;
+
     await transporter.sendMail({
       from: email,
-      to: "francesca.gandelli94@gmail.com",
+      to: toEmail,
       subject: `Messaggio da ${name}`,
       text: message,
     });
 
     res.json({ status: "ok", message: "Messaggio inviato!" });
-
   } catch (err) {
     console.error("Errore invio email:", err);
     res.status(500).json({

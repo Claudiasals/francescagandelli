@@ -2,37 +2,65 @@
 
   @layer components {
 
-    /* Bottone principale: verde chiaro, hover/active verde scuro (niente “inversione” a chiaro) */
+    /* Azioni testuali: stesso linguaggio dei cerchi admin — testo bianco su sfondo colorato, niente sottolineatura */
     .btn-primary {
-      @apply 
-        underline underline-offset-4
-        p-4 gap-2 h-10
-        text-[var(--color-verdolight)] text-lg
-        flex items-center justify-center
-        hover:text-[var(--color-verdoscuro)]
-        active:text-[var(--color-verdoscuro)]
+      @apply inline-flex items-center justify-center
+        rounded-full
+        py-2 px-4
+        text-sm font-semibold normal-case tracking-normal
+        text-white
+        bg-[var(--color-verdolight)]
+        hover:bg-[var(--color-verdoscuro)]
+        active:bg-[var(--color-verdoscuro)]
         transition-colors duration-150
-        w-auto;
+        cursor-pointer
+        border-0 shadow-sm
+        focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-verdoscuro)];
     }
 
     .btn-secondary {
-      @apply 
+      @apply inline-flex items-center justify-center
+        rounded-full
+        py-2 px-4
+        text-sm font-semibold normal-case tracking-normal
+        text-[var(--color-verdolight)]
+        bg-[var(--color-white)]
+        border-2 border-[var(--color-verdolight)]
+        hover:bg-[var(--color-white)]
+        hover:text-[var(--color-verdoscuro)]
+        hover:border-[var(--color-verdoscuro)]
+        active:bg-[var(--color-white)]
+        active:text-[var(--color-verdoscuro)]
+        active:border-[var(--color-verdoscuro)]
+        transition-colors duration-150
+        cursor-pointer
+        shadow-sm
+        focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-verdoscuro)];
+    }
+
+    /* Solo modulo pubblico Contatti: testo sottolineato, coerente con il resto della pagina */
+    .btn-contact-submit {
+      @apply
         underline underline-offset-4
-        p-4 gap-2 h-10
-        text-black text-lg
+        p-4 gap-2 min-h-10
+        text-lg font-extralight tracking-widest uppercase
+        text-[var(--color-verdolight)]
         flex items-center justify-center
         hover:text-[var(--color-verdoscuro)]
         active:text-[var(--color-verdoscuro)]
         transition-colors duration-150
-        w-auto;
+        w-auto
+        bg-transparent border-0 shadow-none
+        cursor-pointer
+        focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-verdolight)];
     }
-  
+
   
   }
   
     /* Pulsanti navbar con effetto di hover */
     .btn-navbar {
-      @apply px-4 py-2 text-base
+      @apply px-4 py-2 text-base cursor-pointer
              text-[var(--color-verdoscuro)]
              hover:text-[var(--color-verdolight)]
              transition-colors duration-300 ease-in-out;
@@ -60,6 +88,7 @@
 
     .icon-menu {
       @apply 
+      cursor-pointer
       text-[var(--color-verdoscuro)]
       hover:text-[var(--color-verdolight)]
       mx-2 inline-block 
@@ -86,6 +115,50 @@
     /* Descrizione della card */
     .card-desc {
       @apply text-black text-sm mb-4 text-center;
+    }
+
+    /*
+     * Bersaglio riordino (home + galleria): .card ha overflow hidden, quindi si evidenzia il blocco foto.
+     */
+    .card.card--drop-target {
+      overflow: visible !important;
+      @apply z-[20];
+    }
+
+    /* Cursore di inserimento reale: verde sito + pulsazione (il lampeggiamento ON/OFF resta nativo del browser) */
+    @keyframes editable-caret-soft-pulse {
+      0%,
+      100% {
+        caret-color: #8ca576;
+      }
+      50% {
+        /* Verde chiarissimo / quasi “luce” sul caret reale */
+        caret-color: #c4d9b3;
+      }
+    }
+
+    .editable-page-text-inner[contenteditable="true"] {
+      cursor: text;
+      caret-color: var(--color-verdolight);
+      min-height: 1.35em;
+      width: 100%;
+    }
+
+    .editable-page-text-inner[contenteditable="true"]:focus {
+      outline: none;
+      animation: editable-caret-soft-pulse 1.05s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .editable-page-text-inner[contenteditable="true"]:focus {
+        animation: none;
+      }
+    }
+
+    .reorder-photo-glow {
+      box-sizing: border-box;
+      border: 4px solid var(--color-verdolight);
+      box-shadow: none;
     }
 
     /*

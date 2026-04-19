@@ -8,6 +8,9 @@
   --color-beige-light: #D8D1C1;
   --color-beige-medium: #D9BD9C;
   --color-marrone: #A68365;
+  /* Giallo ocra (pulsanti secondari / Annulla) */
+  --color-giallo-ocra: #c9a84c;
+  --color-giallo-ocra-hover: #a88b38;
   --color-white: #FFFFFF;
   --color-black: #000000;
 }

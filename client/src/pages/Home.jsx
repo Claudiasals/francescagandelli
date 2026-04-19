@@ -16,20 +16,43 @@ const Home = () => {
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   const [showForm, setShowForm] = useState(false);
-  const [formMode, setFormMode] = useState("create");
-  const [editingId, setEditingId] = useState(null);
 
   const [categoryTitle, setCategoryTitle] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
   const [categoryImagePreview, setCategoryImagePreview] = useState(null);
-  const [editingImageUrl, setEditingImageUrl] = useState(null);
   const [categorySlug, setCategorySlug] = useState("");
 
   const [editMode, setEditMode] = useState(false);
   const [reorderMode, setReorderMode] = useState(false);
+  /** Bozze modifiche categorie esistenti (salvate con un solo «SALVA» in alto). */
+  const [categoryEdits, setCategoryEdits] = useState({});
 
   const dragIndexRef = useRef(null);
+  const [draggingIndex, setDraggingIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+
+  const revokeEditPreviews = (edits) => {
+    Object.values(edits).forEach((d) => {
+      if (d?.localPreview) URL.revokeObjectURL(d.localPreview);
+    });
+  };
+
+  const isCategoryDirty = (cat, d) => {
+    if (!d) return false;
+    return (
+      d.title !== cat.title ||
+      d.description !== cat.description ||
+      d.imageFile != null
+    );
+  };
+
+  const hasPendingWork = () => {
+    const dirtyCat = categories.some((c) => isCategoryDirty(c, categoryEdits[c._id]));
+    const partialCreate =
+      showForm && (categoryTitle || categoryDescription || categoryImage || categoryImagePreview);
+    return dirtyCat || partialCreate;
+  };
 
   const token = () => localStorage.getItem("adminToken");
 
@@ -61,6 +84,13 @@ const Home = () => {
     fetchCover();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (!reorderMode) {
+      setDragOverIndex(null);
+      setDraggingIndex(null);
+    }
+  }, [reorderMode]);
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -109,103 +139,139 @@ const Home = () => {
     setCategoryDescription("");
     setCategoryImage(null);
     setCategoryImagePreview(null);
-    setEditingImageUrl(null);
     setCategorySlug("");
-    setEditingId(null);
-    setFormMode("create");
+  };
+
+  const clearCategoryEdits = () => {
+    setCategoryEdits((prev) => {
+      revokeEditPreviews(prev);
+      return {};
+    });
+  };
+
+  const updateDraft = (id, patch) => {
+    setCategoryEdits((prev) => {
+      const cat = categories.find((c) => c._id === id);
+      if (!cat) return prev;
+      const cur = prev[id] || {
+        title: cat.title,
+        description: cat.description,
+        imageFile: null,
+        localPreview: null,
+      };
+      return { ...prev, [id]: { ...cur, ...patch } };
+    });
+  };
+
+  const handleCategoryImageFile = (id, file) => {
+    if (!file) return;
+    setCategoryEdits((prev) => {
+      const cat = categories.find((c) => c._id === id);
+      if (!cat) return prev;
+      const cur = prev[id] || {
+        title: cat.title,
+        description: cat.description,
+        imageFile: null,
+        localPreview: null,
+      };
+      if (cur.localPreview) URL.revokeObjectURL(cur.localPreview);
+      return {
+        ...prev,
+        [id]: {
+          ...cur,
+          imageFile: file,
+          localPreview: URL.createObjectURL(file),
+        },
+      };
+    });
   };
 
   const openCreateForm = () => {
     resetForm();
-    setFormMode("create");
     setShowForm(true);
     setReorderMode(false);
   };
 
-  const openEditForm = (cat) => {
-    setFormMode("edit");
-    setEditingId(cat._id);
-    setCategoryTitle(cat.title);
-    setCategoryDescription(cat.description);
-    setCategoryImage(null);
-    setCategoryImagePreview(null);
-    setEditingImageUrl(cat.imageUrl || null);
-    setCategorySlug("");
-    setShowForm(true);
-    setReorderMode(false);
-  };
-
-  /** Esci dalla modalità modifica: nasconde matite/cestini su tutte le card e chiude eventuale form aperto. */
-  const finishEditSession = () => {
-    resetForm();
-    setShowForm(false);
-    setEditMode(false);
-    setReorderMode(false);
-  };
-
-  const handleCreateCategory = async () => {
-    if (!categoryTitle || !categoryDescription || !categoryImage) return;
-
-    const formData = new FormData();
-    formData.append("title", categoryTitle);
-    formData.append("description", categoryDescription);
-    formData.append("image", categoryImage);
-    if (categorySlug.trim()) formData.append("slug", categorySlug.trim());
-
-    try {
-      const res = await fetch(`${API}/categories/create`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token()}` },
-        body: formData,
-      });
-      if (res.status === 401) {
-        alert("Sessione scaduta, rieffettua il login");
+  const saveAllChanges = async () => {
+    for (const cat of categories) {
+      const d = categoryEdits[cat._id];
+      if (!d || !isCategoryDirty(cat, d)) continue;
+      if (!d.title?.trim() || !d.description?.trim()) {
+        alert("Titolo e descrizione sono obbligatori per ogni categoria modificata.");
         return;
       }
-      const data = await res.json();
-      if (!res.ok) {
-        console.error("Errore creazione categoria:", data);
-        alert(data.message || "Errore creazione");
-        return;
-      }
-      setCategories((prev) => [...prev, data].sort((a, b) => a.order - b.order));
-      resetForm();
-      setShowForm(false);
-    } catch (err) {
-      console.error("Errore fetch categoria:", err);
     }
-  };
 
-  const handleUpdateCategory = async () => {
-    if (!editingId || !categoryTitle || !categoryDescription) return;
-
-    const formData = new FormData();
-    formData.append("title", categoryTitle);
-    formData.append("description", categoryDescription);
-    if (categoryImage) formData.append("image", categoryImage);
+    const createTentativo =
+      showForm && (categoryTitle || categoryDescription || categoryImage || categorySlug.trim());
+    if (createTentativo) {
+      if (!categoryTitle || !categoryDescription || !categoryImage) {
+        alert(
+          "Completa tutti i campi della nuova categoria (immagine inclusa) oppure usa «Annulla» per chiudere il blocco nuova categoria."
+        );
+        return;
+      }
+    }
 
     try {
-      const res = await fetch(`${API}/categories/${editingId}`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token()}` },
-        body: formData,
-      });
-      if (res.status === 401) {
-        alert("Sessione scaduta, rieffettua il login");
-        return;
+      for (const cat of categories) {
+        const d = categoryEdits[cat._id];
+        if (!d || !isCategoryDirty(cat, d)) continue;
+        const formData = new FormData();
+        formData.append("title", d.title.trim());
+        formData.append("description", d.description.trim());
+        if (d.imageFile) formData.append("image", d.imageFile);
+        const res = await fetch(`${API}/categories/${cat._id}`, {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token()}` },
+          body: formData,
+        });
+        if (res.status === 401) {
+          alert("Sessione scaduta, rieffettua il login");
+          return;
+        }
+        const errData = !res.ok ? await res.json().catch(() => ({})) : null;
+        if (!res.ok) {
+          alert(errData?.message || "Errore aggiornamento categoria");
+          return;
+        }
       }
-      const data = await res.json();
-      if (!res.ok) {
-        console.error("Errore aggiornamento:", data);
-        return;
+
+      if (showForm && categoryTitle && categoryDescription && categoryImage) {
+        const formData = new FormData();
+        formData.append("title", categoryTitle);
+        formData.append("description", categoryDescription);
+        formData.append("image", categoryImage);
+        if (categorySlug.trim()) formData.append("slug", categorySlug.trim());
+        const res = await fetch(`${API}/categories/create`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token()}` },
+          body: formData,
+        });
+        if (res.status === 401) {
+          alert("Sessione scaduta, rieffettua il login");
+          return;
+        }
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.message || "Errore creazione categoria");
+          return;
+        }
       }
-      setCategories((prev) =>
-        prev.map((c) => (c._id === data._id ? { ...c, ...data } : c)).sort((a, b) => a.order - b.order)
-      );
+
+      revokeEditPreviews(categoryEdits);
+      setCategoryEdits({});
       resetForm();
       setShowForm(false);
+      setEditMode(false);
+
+      const resList = await fetch(`${API}/categories`);
+      const dataList = await resList.json();
+      if (Array.isArray(dataList.categories))
+        setCategories([...dataList.categories].sort((a, b) => a.order - b.order));
     } catch (err) {
       console.error(err);
+      alert("Errore durante il salvataggio");
     }
   };
 
@@ -254,39 +320,69 @@ const Home = () => {
     }
   };
 
-  const handleDragStart = (index) => {
+  const handleDragStart = (e, index) => {
     dragIndexRef.current = index;
+    setDraggingIndex(index);
+    setDragOverIndex(null);
+    e.dataTransfer.setData("text/plain", String(index));
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnd = () => {
     dragIndexRef.current = null;
+    setDraggingIndex(null);
+    setDragOverIndex(null);
   };
 
-  const handleDrop = (dropIndex) => {
-    const from = dragIndexRef.current;
+  const handleDragOverCell = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (draggingIndex === null) return;
+    setDragOverIndex((prev) => (prev !== index ? index : prev));
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    setDragOverIndex(null);
+    setDraggingIndex(null);
+    const raw = e.dataTransfer.getData("text/plain");
+    let from = raw !== "" ? parseInt(raw, 10) : dragIndexRef.current;
+    if (from === null || Number.isNaN(from)) return;
     dragIndexRef.current = null;
-    if (from === null || from === dropIndex) return;
+    if (from === dropIndex) return;
 
     const next = [...categories];
-    const [removed] = next.splice(from, 1);
-    next.splice(dropIndex, 0, removed);
+    [next[from], next[dropIndex]] = [next[dropIndex], next[from]];
     setCategories(next);
     persistReorder(next);
   };
 
   const toggleReorderMode = () => {
+    if (!reorderMode) {
+      if (editMode && hasPendingWork()) {
+        if (!window.confirm("Passando al riordino le modifiche non salvate andranno perse. Continuare?")) return;
+        revokeEditPreviews(categoryEdits);
+        setCategoryEdits({});
+        resetForm();
+      }
+      setEditMode(false);
+      setShowForm(false);
+    }
     setReorderMode((r) => !r);
-    setEditMode(false);
-    setShowForm(false);
   };
 
   const toggleEditMode = () => {
-    setEditMode((e) => {
-      if (e) resetForm();
-      return !e;
-    });
+    if (editMode) {
+      if (hasPendingWork() && !window.confirm("Annullare le modifiche non salvate?")) return;
+      revokeEditPreviews(categoryEdits);
+      setCategoryEdits({});
+      resetForm();
+      setShowForm(false);
+      setEditMode(false);
+    } else {
+      setEditMode(true);
+    }
     setReorderMode(false);
-    setShowForm(false);
   };
 
   return (
@@ -295,7 +391,7 @@ const Home = () => {
         {isAdmin && (
           <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
             <label className="btn-edit-gallery">
-              <Pencil size={24} className="text-white" />
+              <Pencil size={24} weight="duotone" className="text-white" />
               <input
                 type="file"
                 className="hidden"
@@ -306,7 +402,7 @@ const Home = () => {
 
             {coverFile && (
               <button type="button" onClick={handleSaveCover} className="btn-primary">
-                Salva
+                SALVA
               </button>
             )}
           </div>
@@ -334,7 +430,7 @@ const Home = () => {
                   onClick={toggleEditMode}
                   title="Attiva o disattiva modifica sulle card"
                 >
-                  <Pencil size={22} className="text-white" />
+                  <Pencil size={22} weight="duotone" className="text-white" />
                 </button>
 
                 <button
@@ -352,31 +448,32 @@ const Home = () => {
                   onClick={openCreateForm}
                   title="Aggiungi una nuova categoria"
                 >
-                  <Plus size={24} className="text-white" />
+                  <Plus size={24} weight="duotone" className="text-white" />
                 </button>
               </div>
 
-              {editMode && (
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={finishEditSession}
-                  title="Chiude la modifica su tutte le card: puoi modificare più categorie prima di uscire"
-                >
-                  Salva pagina
+              {(editMode || showForm) && (
+                <button type="button" className="btn-primary" onClick={saveAllChanges} title="Applica tutte le modifiche alle categorie e la nuova categoria (se presente)">
+                  SALVA
                 </button>
               )}
             </div>
           )}
 
+          {isAdmin && editMode && (
+            <p className="w-full text-center md:text-right text-sm font-extralight tracking-wide text-[var(--color-verdoscuro)] max-w-3xl ml-auto">
+              Clicca su foto, titolo o sottotitolo per modificarli.
+            </p>
+          )}
+
           {isAdmin && reorderMode && (
-            <p className="text-sm text-center md:text-right text-[var(--color-verdoscuro)]">
-              Modalità riordino: trascina una card e rilasciala nella nuova posizione.
+            <p className="text-sm text-center md:text-right text-[var(--color-verdoscuro)] max-w-xl ml-auto leading-relaxed">
+              Trascina per modificare l'ordine.
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[9px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[9px] items-start">
           {showForm && (
             <div className="card flex flex-col transition-shadow duration-200 ease-in-out">
               <label className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
@@ -386,18 +483,8 @@ const Home = () => {
                     alt="Anteprima"
                     className="w-full h-full object-cover"
                   />
-                ) : editingImageUrl ? (
-                  <img
-                    src={editingImageUrl}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
                 ) : (
-                  <span className="text-gray-600 text-center text-sm px-2">
-                    {formMode === "edit"
-                      ? "Nessuna immagine — carica un file per aggiungerla"
-                      : "Carica immagine"}
-                  </span>
+                  <span className="text-gray-600 text-center text-sm px-2">Carica immagine</span>
                 )}
                 <input
                   type="file"
@@ -413,56 +500,39 @@ const Home = () => {
                 />
               </label>
 
-              <div className="flex-1 flex flex-col items-center justify-center bg-white p-4 text-center gap-2">
+              <div className="flex h-[11rem] shrink-0 flex-col justify-start gap-2 overflow-y-auto overflow-x-hidden bg-white p-4 py-3 text-center">
                 <input
                   type="text"
                   placeholder="Titolo (es. Famiglia)"
                   value={categoryTitle}
                   onChange={(e) => setCategoryTitle(e.target.value)}
-                  className="outline-none text-lg text-center w-full"
+                  className="w-full shrink-0 break-words text-center text-lg outline-none"
                 />
                 <textarea
                   placeholder="Sottotitolo / descrizione (es. Momenti in famiglia)"
                   value={categoryDescription}
                   onChange={(e) => setCategoryDescription(e.target.value)}
-                  className="outline-none text-sm text-center w-full resize-none min-h-[4rem]"
+                  className="min-h-0 w-full flex-1 resize-none break-words text-center text-sm outline-none"
                 />
-
-                {formMode === "create" && (
-                  <input
-                    type="text"
-                    placeholder="Slug URL opzionale (es. matrimoni)"
-                    value={categorySlug}
-                    onChange={(e) => setCategorySlug(e.target.value)}
-                    className="outline-none text-xs text-center w-full text-gray-600"
-                  />
-                )}
-
-                <div className="flex flex-row gap-2 mt-2 w-full justify-between">
+              </div>
+              <div className="flex shrink-0 flex-col gap-2 border-t border-black/10 bg-white px-4 pb-4 pt-3 text-center">
+                <input
+                  type="text"
+                  placeholder="Slug URL opzionale (es. matrimoni)"
+                  value={categorySlug}
+                  onChange={(e) => setCategorySlug(e.target.value)}
+                  className="w-full text-center text-xs text-gray-600 outline-none"
+                />
+                <div className="flex w-full justify-center">
                   <button
                     type="button"
-                    className="btn-secondary flex-1"
+                    className="btn-secondary"
                     onClick={() => {
                       resetForm();
                       setShowForm(false);
                     }}
                   >
                     Annulla
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn-primary flex-1"
-                    onClick={() =>
-                      formMode === "create" ? handleCreateCategory() : handleUpdateCategory()
-                    }
-                    disabled={
-                      formMode === "create"
-                        ? !categoryTitle || !categoryDescription || !categoryImage
-                        : !categoryTitle || !categoryDescription
-                    }
-                  >
-                    Salva
                   </button>
                 </div>
               </div>
@@ -472,32 +542,40 @@ const Home = () => {
           {categoriesLoading ? (
             <div className="col-span-full h-48 bg-gray-200 animate-pulse rounded" />
           ) : (
-            categories.map((cat, index) => (
-              <div
-                key={cat._id}
-                draggable={isAdmin && reorderMode}
-                onDragStart={() => handleDragStart(index)}
-                onDragEnd={handleDragEnd}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  handleDrop(index);
-                }}
-                className={reorderMode && isAdmin ? "rounded" : ""}
-              >
-                <Card
-                  title={cat.title}
-                  description={cat.description}
-                  link={cat.link}
-                  imageUrl={cat.imageUrl}
-                  isAdmin={isAdmin}
-                  editMode={editMode}
-                  reorderMode={reorderMode}
-                  onEdit={() => openEditForm(cat)}
-                  onDelete={() => handleDeleteCategory(cat)}
-                />
-              </div>
-            ))
+            categories.map((cat, index) => {
+              const showDropTarget =
+                reorderMode &&
+                isAdmin &&
+                draggingIndex !== null &&
+                dragOverIndex === index &&
+                draggingIndex !== index;
+              return (
+                <div
+                  key={cat._id}
+                  draggable={isAdmin && reorderMode}
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOverCell(e, index)}
+                  onDrop={(e) => handleDrop(e, index)}
+                  className={`${reorderMode && isAdmin ? "rounded [&>*]:pointer-events-none" : ""} ${
+                    reorderMode && isAdmin && draggingIndex === index ? "opacity-50" : ""
+                  } ${showDropTarget ? "z-10 overflow-visible" : ""}`}
+                >
+                  <Card
+                    category={cat}
+                    draft={categoryEdits[cat._id]}
+                    imageUrl={cat.imageUrl}
+                    isAdmin={isAdmin}
+                    editMode={editMode}
+                    reorderMode={reorderMode}
+                    reorderDropTarget={showDropTarget}
+                    onDraftChange={updateDraft}
+                    onImageFile={handleCategoryImageFile}
+                    onDelete={() => handleDeleteCategory(cat)}
+                  />
+                </div>
+              );
+            })
           )}
         </div>
       </section>
