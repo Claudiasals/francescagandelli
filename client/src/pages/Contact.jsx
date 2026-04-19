@@ -160,7 +160,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact-section p-8 max-w-2xl mx-auto space-y-18">
+    <section className="contact-section p-8 max-w-2xl mx-auto space-y-6">
       <div className="flex flex-wrap gap-2 justify-between items-start">
         <h2 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
           Contattami
@@ -182,7 +182,7 @@ const Contact = () => {
 
       <div className="flex flex-col justify-center gap-6">
         {loading ? (
-          <div className="h-32 bg-gray-200 animate-pulse rounded" />
+          <div className="h-40 bg-gray-200 animate-pulse rounded" />
         ) : isAdmin && editing ? (
           <div className="space-y-8 w-full">
             <EditablePageText
@@ -191,12 +191,14 @@ const Contact = () => {
               className={`leading-relaxed ${introClass}`}
               aria-label="Testo introduttivo contatti"
             />
-            <EditablePageText
-              value={editFormLead}
-              onChange={setEditFormLead}
-              className="text-lg text-verdoscuro font-extralight leading-relaxed"
-              aria-label="Testo sopra il modulo di contatto"
-            />
+            <div className="w-full pt-2">
+              <EditablePageText
+                value={editFormLead}
+                onChange={setEditFormLead}
+                className="text-lg font-extralight leading-relaxed text-[var(--color-verdolight)]"
+                aria-label="Testo sopra il modulo di contatto"
+              />
+            </div>
             <div className="flex gap-4 justify-end">
               <button type="button" className="btn-secondary" onClick={cancelEdit}>
                 Annulla
@@ -211,14 +213,14 @@ const Contact = () => {
         )}
       </div>
 
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-8">
         {errorMessage && (
           <p className="text-red-600 font-semibold">{errorMessage}</p>
         )}
 
         {!submitted && !loading && !(isAdmin && editing) ? (
-          <form id="contact-form" onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <p className="text-lg text-verdoscuro">{formLeadText}</p>
+          <form id="contact-form" onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
+            <p className="text-lg font-extralight text-[var(--color-verdolight)]">{formLeadText}</p>
 
             <label className="flex flex-col">
               <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="NOME" />
@@ -241,7 +243,7 @@ const Contact = () => {
         )}
 
         {!(isAdmin && editing) && (
-          <div className="flex flex-col gap-2 mb-12">
+          <div className="-mt-2 flex flex-col gap-2 mb-12">
             <a
               href={`mailto:${publicEmail}`}
               className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
