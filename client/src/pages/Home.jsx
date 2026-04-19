@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Card from "../components/Card";
-import { Pencil, ArrowsClockwise, Plus } from "phosphor-react";
+import { Pencil, ArrowsClockwise, Plus, Check, X } from "phosphor-react";
 
 const API = "http://localhost:5000/api";
 
@@ -21,11 +21,9 @@ const Home = () => {
   const [categoryDescription, setCategoryDescription] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
   const [categoryImagePreview, setCategoryImagePreview] = useState(null);
-  const [categorySlug, setCategorySlug] = useState("");
-
   const [editMode, setEditMode] = useState(false);
   const [reorderMode, setReorderMode] = useState(false);
-  /** Bozze modifiche categorie esistenti (salvate con un solo «SALVA» in alto). */
+  /** Bozze modifiche categorie esistenti (conferma con l’icona ✓ in alto). */
   const [categoryEdits, setCategoryEdits] = useState({});
 
   const dragIndexRef = useRef(null);
@@ -139,7 +137,6 @@ const Home = () => {
     setCategoryDescription("");
     setCategoryImage(null);
     setCategoryImagePreview(null);
-    setCategorySlug("");
   };
 
   const clearCategoryEdits = () => {
@@ -203,11 +200,11 @@ const Home = () => {
     }
 
     const createTentativo =
-      showForm && (categoryTitle || categoryDescription || categoryImage || categorySlug.trim());
+      showForm && (categoryTitle || categoryDescription || categoryImage);
     if (createTentativo) {
       if (!categoryTitle || !categoryDescription || !categoryImage) {
         alert(
-          "Completa tutti i campi della nuova categoria (immagine inclusa) oppure usa «Annulla» per chiudere il blocco nuova categoria."
+          "Completa tutti i campi della nuova categoria (immagine inclusa) oppure usa la X rossa per chiudere il blocco nuova categoria."
         );
         return;
       }
@@ -242,7 +239,6 @@ const Home = () => {
         formData.append("title", categoryTitle);
         formData.append("description", categoryDescription);
         formData.append("image", categoryImage);
-        if (categorySlug.trim()) formData.append("slug", categorySlug.trim());
         const res = await fetch(`${API}/categories/create`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token()}` },
@@ -371,6 +367,14 @@ const Home = () => {
     setReorderMode((r) => !r);
   };
 
+  /** Chiude il riordino: l’ordine è già salvato a ogni rilascio; il pulsante matita/frecce torna verde chiaro come gli altri. */
+  const finishReorderMode = () => {
+    setReorderMode(false);
+    setDragOverIndex(null);
+    setDraggingIndex(null);
+    dragIndexRef.current = null;
+  };
+
   const toggleEditMode = () => {
     if (editMode) {
       if (hasPendingWork() && !window.confirm("Annullare le modifiche non salvate?")) return;
@@ -389,7 +393,17 @@ const Home = () => {
     <>
       <section className="relative w-full h-64 md:h-96 overflow-hidden">
         {isAdmin && (
-          <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <div className="absolute top-4 right-4 z-10 flex flex-wrap items-center justify-end gap-2">
+            {coverFile && (
+              <button
+                type="button"
+                onClick={handleSaveCover}
+                className="btn-confirm-icon"
+                title="Applica la nuova copertina"
+              >
+                <Check size={22} weight="bold" />
+              </button>
+            )}
             <label className="btn-edit-gallery">
               <Pencil size={24} weight="duotone" className="text-white" />
               <input
@@ -399,12 +413,6 @@ const Home = () => {
                 onChange={handleCoverChange}
               />
             </label>
-
-            {coverFile && (
-              <button type="button" onClick={handleSaveCover} className="btn-primary">
-                SALVA
-              </button>
-            )}
           </div>
         )}
 
@@ -422,41 +430,50 @@ const Home = () => {
       <section className="px-8 pb-8 pt-[22px] md:mt-15 mb-16">
         <div className="flex flex-col gap-2">
           {isAdmin && (
-            <div className="flex flex-col gap-2 items-end">
-              <div className="flex flex-wrap gap-2 justify-end items-center">
+            <div className="flex flex-wrap gap-2 items-center justify-end">
+              {(editMode || showForm || reorderMode) && (
                 <button
                   type="button"
-                  className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
-                  onClick={toggleEditMode}
-                  title="Attiva o disattiva modifica sulle card"
+                  className="btn-confirm-icon"
+                  onClick={() => {
+                    if (reorderMode) finishReorderMode();
+                    else saveAllChanges();
+                  }}
+                  title={
+                    reorderMode
+                      ? "Chiudi riordino (l’ordine è già salvato a ogni spostamento)"
+                      : "Applica tutte le modifiche alle categorie e la nuova categoria (se presente)"
+                  }
                 >
-                  <Pencil size={22} weight="duotone" className="text-white" />
-                </button>
-
-                <button
-                  type="button"
-                  className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
-                  onClick={toggleReorderMode}
-                  title="Trascina le card per riordinarle"
-                >
-                  <ArrowsClockwise size={22} className="text-white" />
-                </button>
-
-                <button
-                  type="button"
-                  className="btn-edit-gallery"
-                  onClick={openCreateForm}
-                  title="Aggiungi una nuova categoria"
-                >
-                  <Plus size={24} weight="duotone" className="text-white" />
-                </button>
-              </div>
-
-              {(editMode || showForm) && (
-                <button type="button" className="btn-primary" onClick={saveAllChanges} title="Applica tutte le modifiche alle categorie e la nuova categoria (se presente)">
-                  SALVA
+                  <Check size={22} weight="bold" />
                 </button>
               )}
+              <button
+                type="button"
+                className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
+                onClick={toggleEditMode}
+                title="Attiva o disattiva modifica sulle card"
+              >
+                <Pencil size={22} weight="duotone" className="text-white" />
+              </button>
+
+              <button
+                type="button"
+                className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
+                onClick={toggleReorderMode}
+                title="Trascina le card per riordinarle"
+              >
+                <ArrowsClockwise size={22} className="text-white" />
+              </button>
+
+              <button
+                type="button"
+                className="btn-edit-gallery"
+                onClick={openCreateForm}
+                title="Aggiungi una nuova categoria"
+              >
+                <Plus size={24} weight="duotone" className="text-white" />
+              </button>
             </div>
           )}
 
@@ -468,15 +485,15 @@ const Home = () => {
 
           {isAdmin && reorderMode && (
             <p className="text-sm text-center md:text-right text-[var(--color-verdoscuro)] max-w-xl ml-auto leading-relaxed">
-              Trascina per modificare l'ordine.
+              Trascina le categorie per modificarne l'ordine.
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[9px] items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[9px] items-stretch">
           {showForm && (
-            <div className="card flex flex-col transition-shadow duration-200 ease-in-out">
-              <label className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer overflow-hidden">
+            <div className="card flex h-full min-w-0 flex-col transition-shadow duration-200 ease-in-out">
+              <label className="h-48 w-full shrink-0 bg-gray-200 flex cursor-pointer items-center justify-center overflow-hidden">
                 {categoryImagePreview ? (
                   <img
                     src={categoryImagePreview}
@@ -506,35 +523,28 @@ const Home = () => {
                   placeholder="Titolo (es. Famiglia)"
                   value={categoryTitle}
                   onChange={(e) => setCategoryTitle(e.target.value)}
-                  className="w-full shrink-0 break-words text-center text-lg outline-none"
+                  className="min-w-0 w-full shrink-0 break-words text-center text-lg outline-none [overflow-wrap:anywhere]"
                 />
                 <textarea
                   placeholder="Sottotitolo / descrizione (es. Momenti in famiglia)"
                   value={categoryDescription}
                   onChange={(e) => setCategoryDescription(e.target.value)}
-                  className="min-h-0 w-full flex-1 resize-none break-words text-center text-sm outline-none"
+                  className="min-h-[4rem] min-w-0 w-full flex-1 resize-none break-words text-center text-sm outline-none [overflow-wrap:anywhere]"
                 />
               </div>
-              <div className="flex shrink-0 flex-col gap-2 border-t border-black/10 bg-white px-4 pb-4 pt-3 text-center">
-                <input
-                  type="text"
-                  placeholder="Slug URL opzionale (es. matrimoni)"
-                  value={categorySlug}
-                  onChange={(e) => setCategorySlug(e.target.value)}
-                  className="w-full text-center text-xs text-gray-600 outline-none"
-                />
-                <div className="flex w-full justify-center">
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    onClick={() => {
-                      resetForm();
-                      setShowForm(false);
-                    }}
-                  >
-                    Annulla
-                  </button>
-                </div>
+              <div className="flex shrink-0 justify-center border-t border-black/10 bg-white px-4 pb-4 pt-3">
+                <button
+                  type="button"
+                  className="btn-cancel-icon"
+                  onClick={() => {
+                    resetForm();
+                    setShowForm(false);
+                  }}
+                  title="Annulla"
+                  aria-label="Annulla"
+                >
+                  <X size={18} weight="bold" aria-hidden />
+                </button>
               </div>
             </div>
           )}
@@ -557,7 +567,7 @@ const Home = () => {
                   onDragEnd={handleDragEnd}
                   onDragOver={(e) => handleDragOverCell(e, index)}
                   onDrop={(e) => handleDrop(e, index)}
-                  className={`${reorderMode && isAdmin ? "rounded [&>*]:pointer-events-none" : ""} ${
+                  className={`h-full min-w-0 ${reorderMode && isAdmin ? "rounded [&>*]:pointer-events-none" : ""} ${
                     reorderMode && isAdmin && draggingIndex === index ? "opacity-50" : ""
                   } ${showDropTarget ? "z-10 overflow-visible" : ""}`}
                 >

@@ -7,7 +7,7 @@
       @apply inline-flex items-center justify-center
         rounded-full
         py-2 px-4
-        text-sm font-semibold normal-case tracking-normal
+        text-sm font-bold normal-case tracking-normal
         text-white
         bg-[var(--color-verdolight)]
         hover:bg-[var(--color-verdoscuro)]
@@ -22,7 +22,7 @@
       @apply inline-flex items-center justify-center
         rounded-full
         py-2 px-4
-        text-sm font-semibold normal-case tracking-normal
+        text-sm font-bold normal-case tracking-normal
         text-[var(--color-verdolight)]
         bg-[var(--color-white)]
         border-2 border-[var(--color-verdolight)]
@@ -84,6 +84,40 @@
       .btn-edit-gallery.btn-edit-gallery-active {
         @apply bg-[var(--color-verdoscuro)] hover:bg-[var(--color-verdoscuro)];
       }
+
+      .btn-edit-gallery:disabled {
+        @apply cursor-not-allowed opacity-45;
+      }
+
+      /* Conferma (✓): bianco, bordo azzurro, icona in tinta */
+      .btn-confirm-icon {
+        @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full
+          border-2 border-sky-500 bg-white
+          text-sky-600
+          shadow-sm
+          transition-colors duration-150
+          cursor-pointer
+          outline-none hover:border-sky-600 hover:bg-sky-50 hover:text-sky-700
+          active:bg-sky-50 active:text-sky-700
+          focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500;
+      }
+
+      .btn-confirm-icon:disabled {
+        @apply cursor-not-allowed opacity-45;
+      }
+
+      /* Annulla: cerchio bianco, bordo e icona rossi (come i cerchi action) */
+      .btn-cancel-icon {
+        @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full
+          border-2 border-red-600 bg-white
+          text-red-600
+          shadow-sm
+          transition-colors duration-150
+          cursor-pointer
+          outline-none hover:border-red-700 hover:bg-red-50 hover:text-red-700
+          active:bg-red-50 active:text-red-700
+          focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+      }
     }
 
     .icon-menu {
@@ -97,8 +131,8 @@
 
     /* Card per foto e album cliccabili */
     .card {
-      @apply flex flex-col shadow-md  
-      overflow-hidden bg-white cursor-pointer 
+      @apply flex min-h-0 min-w-0 max-w-full flex-col shadow-md
+      overflow-hidden bg-white cursor-pointer
       transition-all duration-300 ease-in-out
     }
   
@@ -109,12 +143,12 @@
   
     /* Titolo della card */
     .card-title {
-      @apply text-[var(--color-verdoscuro)] text-xl mb-2 text-center;
+      @apply text-[var(--color-verdoscuro)] text-xl text-center break-words [overflow-wrap:anywhere];
     }
-  
+
     /* Descrizione della card */
     .card-desc {
-      @apply text-black text-sm mb-4 text-center;
+      @apply text-black text-sm text-center break-words [overflow-wrap:anywhere];
     }
 
     /*

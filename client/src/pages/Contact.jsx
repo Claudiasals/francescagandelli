@@ -1,4 +1,4 @@
-import { Pencil } from "phosphor-react";
+import { Pencil, Check, X } from "phosphor-react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
@@ -167,7 +167,18 @@ const Contact = () => {
         </h2>
 
         {isAdmin && (
-          <div className="flex gap-2 p-2 justify-end shrink-0">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+            {editing && (
+              <button
+                type="button"
+                className="btn-confirm-icon"
+                onClick={handleSaveText}
+                disabled={!textDirty}
+                title="Salva le modifiche"
+              >
+                <Check size={22} weight="bold" />
+              </button>
+            )}
             <button
               type="button"
               className={`btn-edit-gallery ${editing ? "btn-edit-gallery-active" : ""}`}
@@ -199,12 +210,15 @@ const Contact = () => {
                 aria-label="Testo sopra il modulo di contatto"
               />
             </div>
-            <div className="flex gap-4 justify-end">
-              <button type="button" className="btn-secondary" onClick={cancelEdit}>
-                Annulla
-              </button>
-              <button type="button" className="btn-primary" onClick={handleSaveText} disabled={!textDirty}>
-                SALVA
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                className="btn-cancel-icon"
+                onClick={cancelEdit}
+                title="Annulla"
+                aria-label="Annulla"
+              >
+                <X size={18} weight="bold" aria-hidden />
               </button>
             </div>
           </div>

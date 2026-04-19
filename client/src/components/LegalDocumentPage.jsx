@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil } from "phosphor-react";
+import { Pencil, Check, X } from "phosphor-react";
 import EditablePageText from "./EditablePageText.jsx";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 
@@ -123,7 +123,18 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
         </h1>
 
         {isAdmin && (
-          <div className="flex gap-2 p-2 justify-end shrink-0">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+            {editing && (
+              <button
+                type="button"
+                className="btn-confirm-icon"
+                onClick={handleSave}
+                disabled={!dirty}
+                title="Salva le modifiche"
+              >
+                <Check size={22} weight="bold" />
+              </button>
+            )}
             <button
               type="button"
               className={`btn-edit-gallery ${editing ? "btn-edit-gallery-active" : ""}`}
@@ -152,12 +163,15 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
             className={legalBodyClass}
             aria-label={`Modifica ${title}`}
           />
-          <div className="flex gap-4 justify-end">
-            <button type="button" className="btn-secondary" onClick={cancelEdit}>
-              Annulla
-            </button>
-            <button type="button" className="btn-primary" onClick={handleSave} disabled={!dirty}>
-              SALVA
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              className="btn-cancel-icon"
+              onClick={cancelEdit}
+              title="Annulla"
+              aria-label="Annulla"
+            >
+              <X size={18} weight="bold" aria-hidden />
             </button>
           </div>
         </div>

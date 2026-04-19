@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { Pencil, ArrowsClockwise, Plus, Trash } from "phosphor-react";
+import { Pencil, ArrowsClockwise, Plus, Trash, Check, CircleNotch, X } from "phosphor-react";
 
 const API = "http://localhost:5000/api/gallery";
 
@@ -436,9 +436,15 @@ const GalleryPage = () => {
                 className="gallery-modal-caption"
               />
             </div>
-            <div className="flex flex-row justify-between gap-4 pt-2">
-              <button type="button" className="btn-secondary" onClick={closeUploadModal}>
-                Annulla
+            <div className="flex flex-row items-center justify-between gap-4 pt-2">
+              <button
+                type="button"
+                className="btn-cancel-icon"
+                onClick={closeUploadModal}
+                title="Annulla"
+                aria-label="Annulla"
+              >
+                <X size={18} weight="bold" aria-hidden />
               </button>
               <button type="button" className="btn-primary" onClick={handleConfirmUpload}>
                 Carica foto
@@ -454,53 +460,65 @@ const GalleryPage = () => {
         </h1>
 
         {isAdmin && (
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex flex-wrap gap-2 justify-end items-center">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {((editMode && photos.length > 0) || reorderMode) && (
               <button
                 type="button"
-                className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
-                onClick={toggleEditMode}
-                title="Modifica"
+                className="btn-confirm-icon"
+                disabled={reorderMode ? false : savingCaptions}
+                onClick={() => {
+                  if (reorderMode) finishReorderMode();
+                  else handleSaveAllCaptions();
+                }}
+                title={
+                  savingCaptions && !reorderMode
+                    ? "Salvataggio in corso…"
+                    : reorderMode
+                      ? "Chiudi riordino (l’ordine è già salvato a ogni spostamento)"
+                      : "Salva tutte le didascalie modificate"
+                }
               >
-                <Pencil size={22} weight="duotone" className="text-white" />
-              </button>
-
-              <button
-                type="button"
-                className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
-                onClick={toggleReorderMode}
-                title="Trascina le foto per riordinarle"
-              >
-                <ArrowsClockwise size={22} className="text-white" />
-              </button>
-
-              <button type="button" className="btn-edit-gallery" onClick={openFilePicker} title="Aggiungi foto">
-                <Plus size={24} weight="duotone" className="text-white" />
-              </button>
-            </div>
-            {editMode && photos.length > 0 && (
-              <button
-                type="button"
-                className="btn-primary"
-                disabled={savingCaptions}
-                onClick={handleSaveAllCaptions}
-              >
-                {savingCaptions ? "SALVATAGGIO…" : "SALVA"}
+                {savingCaptions && !reorderMode ? (
+                  <CircleNotch size={22} weight="bold" className="animate-spin" />
+                ) : (
+                  <Check size={22} weight="bold" />
+                )}
               </button>
             )}
-            {reorderMode && (
-              <button type="button" className="btn-primary" onClick={finishReorderMode}>
-                SALVA
-              </button>
-            )}
+            <button
+              type="button"
+              className={`btn-edit-gallery ${editMode ? "btn-edit-gallery-active" : ""}`}
+              onClick={toggleEditMode}
+              title="Modifica"
+            >
+              <Pencil size={22} weight="duotone" className="text-white" />
+            </button>
+
+            <button
+              type="button"
+              className={`btn-edit-gallery ${reorderMode ? "btn-edit-gallery-active" : ""}`}
+              onClick={toggleReorderMode}
+              title="Trascina le foto per riordinarle"
+            >
+              <ArrowsClockwise size={22} className="text-white" />
+            </button>
+
+            <button type="button" className="btn-edit-gallery" onClick={openFilePicker} title="Aggiungi foto">
+              <Plus size={24} weight="duotone" className="text-white" />
+            </button>
           </div>
         )}
       </div>
 
+      {isAdmin && editMode && (
+        <p className="mb-4 w-full max-w-3xl text-center text-sm font-extralight tracking-wide text-[var(--color-verdoscuro)] md:text-right ml-auto">
+          Clicca sulle foto per modificarle.
+        </p>
+      )}
+
       {isAdmin && reorderMode && (
         <p className="text-sm text-[var(--color-verdoscuro)] mb-4 text-right max-w-xl ml-auto leading-relaxed">
-          Modalità riordino: trascina una foto e rilasciala su un’altra: le due si scambiano di posto (le altre
-          restano ferme). Un bordo verde da 4px intorno alla foto indica con quale avviene lo scambio.
+          Trascina le categorie per modificarne l&apos;ordine.
         </p>
       )}
 

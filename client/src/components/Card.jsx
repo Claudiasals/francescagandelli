@@ -33,7 +33,7 @@ const Card = ({
     return (
       <div
         className={`
-        card cursor-default
+        card h-full min-w-0 cursor-default
         transition-shadow duration-200 ease-in-out
         relative
         ${reorderMode ? "cursor-grab active:cursor-grabbing" : ""}
@@ -57,7 +57,7 @@ const Card = ({
         )}
 
         <label
-          className={`w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer relative ${
+          className={`h-48 w-full shrink-0 bg-gray-200 flex items-center justify-center cursor-pointer relative ${
             reorderDropTarget ? "overflow-hidden rounded-none" : "overflow-hidden rounded-sm"
           }`}
         >
@@ -78,18 +78,18 @@ const Card = ({
           />
         </label>
 
-        <div className="p-4 bg-white flex flex-col gap-2">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 bg-white p-4">
           <input
             type="text"
             value={title}
             onChange={(e) => onDraftChange?.(category._id, { title: e.target.value })}
-            className="outline-none text-lg text-center w-full card-title border-0 p-0 bg-transparent"
+            className="card-title min-h-0 w-full min-w-0 shrink-0 border-0 bg-transparent p-0 text-center text-lg outline-none break-words [overflow-wrap:anywhere]"
             placeholder="Titolo"
           />
           <textarea
             value={description}
             onChange={(e) => onDraftChange?.(category._id, { description: e.target.value })}
-            className="outline-none text-sm text-center w-full resize-none min-h-[4rem] card-desc border-0 p-0 bg-transparent"
+            className="card-desc min-h-[4rem] min-w-0 w-full flex-1 resize-none border-0 bg-transparent p-0 text-center text-sm outline-none break-words [overflow-wrap:anywhere]"
             placeholder="Sottotitolo / descrizione"
           />
         </div>
@@ -110,7 +110,7 @@ const Card = ({
         setTimeout(() => navigate(category.link), 150);
       }}
       className={`
-        card cursor-pointer
+        card h-full min-w-0 cursor-pointer
         transition-shadow duration-200 ease-in-out
         relative
         ${pressed ? "scale-95" : ""}
@@ -119,7 +119,7 @@ const Card = ({
       `}
     >
       <div
-        className={`w-full h-48 bg-gray-200 flex items-center justify-center ${
+        className={`h-48 w-full shrink-0 bg-gray-200 flex items-center justify-center ${
           reorderDropTarget ? "overflow-hidden rounded-none" : "overflow-hidden"
         }`}
       >
@@ -135,9 +135,9 @@ const Card = ({
         )}
       </div>
 
-      <div className="p-4 bg-white">
-        <h3 className="card-title">{category.title}</h3>
-        <p className="card-desc">{category.description}</p>
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-start gap-2 bg-white p-4">
+        <h3 className="card-title shrink-0">{category.title}</h3>
+        <p className="card-desc min-h-0 flex-1">{category.description}</p>
       </div>
     </div>
   );
