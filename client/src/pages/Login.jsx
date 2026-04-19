@@ -126,7 +126,15 @@ const Login = () => {
                             <Wrench size={20} weight="duotone" className="text-white" />
                         </Link>
                     )}
-                    <button type="submit" className="btn-primary flex-1 sm:flex-initial min-w-0">
+                    <button
+                        type="submit"
+                        className="underline underline-offset-4 p-4 gap-2 h-10
+                   text-[var(--color-verdoscuro)] text-lg
+                   flex items-center justify-center
+                   hover:text-[var(--color-verdolight)]
+                   transition-colors duration-150
+                   w-auto shrink-0"
+                    >
                         Accedi
                     </button>
                 </div>
