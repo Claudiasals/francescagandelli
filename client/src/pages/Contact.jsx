@@ -9,7 +9,7 @@ import { API_BASE } from "../config/api.js";
 const API = API_BASE;
 
 const introClass =
-  "font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase";
+  "font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase break-words [overflow-wrap:anywhere]";
 
 /** Estrae lo username dal link Instagram (es. …/francescagandelli_ph/). */
 function instagramUsernameFromUrl(url) {
@@ -162,7 +162,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact-section p-8 max-w-2xl mx-auto space-y-6">
+    <section className="contact-section w-full min-w-0 max-w-2xl mx-auto box-border px-4 py-8 sm:px-8 space-y-6">
       <div className="flex flex-wrap gap-2 justify-between items-start">
         <h2 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
           Contattami
@@ -193,11 +193,11 @@ const Contact = () => {
         )}
       </div>
 
-      <div className="flex flex-col justify-center gap-6">
+      <div className="flex flex-col justify-center gap-6 min-w-0 w-full">
         {loading ? (
           <div className="h-40 bg-gray-200 animate-pulse rounded" />
         ) : isAdmin && editing ? (
-          <div className="space-y-8 w-full">
+          <div className="space-y-8 w-full min-w-0">
             <EditablePageText
               value={editIntro}
               onChange={setEditIntro}
@@ -229,27 +229,48 @@ const Contact = () => {
         )}
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 min-w-0 w-full">
         {errorMessage && (
           <p className="text-red-600 font-semibold">{errorMessage}</p>
         )}
 
         {!submitted && !loading && !(isAdmin && editing) ? (
-          <form id="contact-form" onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
-            <p className="text-lg font-extralight text-[var(--color-verdolight)]">{formLeadText}</p>
+          <form
+            id="contact-form"
+            onSubmit={handleSubmit}
+            className="flex w-full min-w-0 max-w-full flex-col gap-4 pt-2 box-border"
+          >
+            <p className="text-lg font-extralight text-[var(--color-verdolight)] break-words [overflow-wrap:anywhere]">
+              {formLeadText}
+            </p>
 
-            <label className="flex flex-col">
-              <input type="text" name="name" className="border border-gray-300 rounded p-2 mt-1" placeholder="NOME" />
+            <label className="flex min-w-0 w-full max-w-full flex-col">
+              <input
+                type="text"
+                name="name"
+                className="mt-1 box-border w-full min-w-0 max-w-full rounded border border-gray-300 p-2"
+                placeholder="NOME"
+              />
             </label>
-            <label className="flex flex-col">
-              <input type="email" name="email" className="border border-gray-300 rounded p-2 mt-1" placeholder="EMAIL" />
+            <label className="flex min-w-0 w-full max-w-full flex-col">
+              <input
+                type="email"
+                name="email"
+                className="mt-1 box-border w-full min-w-0 max-w-full rounded border border-gray-300 p-2"
+                placeholder="EMAIL"
+              />
             </label>
-            <label className="flex flex-col">
-              <textarea name="message" rows="5" className="border border-gray-300 rounded p-2 mt-1" placeholder="MESSAGGIO" />
+            <label className="flex min-w-0 w-full max-w-full flex-col">
+              <textarea
+                name="message"
+                rows="5"
+                className="mt-1 box-border w-full min-w-0 max-w-full resize-y rounded border border-gray-300 p-2"
+                placeholder="MESSAGGIO"
+              />
             </label>
 
             <div className="flex justify-end">
-              <button type="submit" className="btn-contact-submit">
+              <button type="submit" className="btn-contact-submit max-w-full">
                 Invia
               </button>
             </div>
@@ -259,17 +280,17 @@ const Contact = () => {
         )}
 
         {!(isAdmin && editing) && (
-          <div className="-mt-2 flex flex-col gap-2 mb-12">
+          <div className="-mt-2 mb-12 flex min-w-0 w-full max-w-full flex-col gap-2">
             <a
               href={`mailto:${publicEmail}`}
-              className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               email: {publicEmail}
             </a>
 
             <a
               href={`tel:${phoneTel}`}
-              className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               telefono: {phoneDisplay}
             </a>
@@ -278,7 +299,7 @@ const Contact = () => {
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col text-black text-lg transition-colors duration-200 hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               {instagramUser ? `Instagram: ${instagramUser}` : "Instagram"}
             </a>

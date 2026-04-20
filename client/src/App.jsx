@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <SiteSettingsProvider>
-    <main className="flex flex-col min-h-screen font-sans text-[var(--color-black)] bg-[var(--color-white)]">
+    <main className="flex min-h-screen w-full min-w-0 flex-col font-sans text-[var(--color-black)] bg-[var(--color-white)] overflow-x-clip">
 
       <Navbar/>
 
