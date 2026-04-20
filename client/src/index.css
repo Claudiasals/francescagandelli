@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "./components.css";
 
+/* Evita che il browser “ancori” lo scroll quando il layout cambia dopo il cambio route (SPA). */
+html {
+  overflow-anchor: none;
+}
+
 /* Palette personalizzata */
 @theme {
   --color-verdoscuro: #1E431D;
