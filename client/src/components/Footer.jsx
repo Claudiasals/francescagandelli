@@ -9,7 +9,7 @@ const Footer = () => {
     return (
         <>
             <footer
-                className="mt-12 w-full shrink-0 border-t border-[var(--color-verdolight)]/25 bg-[color-mix(in_srgb,var(--color-verdolight)_14%,var(--color-white))] px-6 py-8 text-center text-[var(--color-verdoscuro)] overflow-visible"
+                className="mt-12 w-full shrink-0 bg-[color-mix(in_srgb,var(--color-verdolight)_14%,var(--color-white))] px-6 py-8 text-center text-[var(--color-verdoscuro)] overflow-visible"
             >
                 <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                     <a
