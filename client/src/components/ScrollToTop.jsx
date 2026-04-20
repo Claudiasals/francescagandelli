@@ -1,8 +1,23 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-/** Azzera lo scroll del documento (window + html + body) per compatibilità mobile/desktop. */
+/** Porta il focus sul main senza scroll (evita che il browser segua il link del footer appena cliccato). */
+function moveFocusToMainWithoutScroll() {
+  const mainEl = document.getElementById("app-main");
+  if (!mainEl || typeof mainEl.focus !== "function") return;
+  try {
+    mainEl.focus({ preventScroll: true });
+  } catch {
+    mainEl.focus();
+  }
+}
+
 function scrollDocumentToTop() {
+  const root = document.scrollingElement;
+  if (root) {
+    root.scrollTop = 0;
+    root.scrollLeft = 0;
+  }
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   document.documentElement.scrollTop = 0;
   document.documentElement.scrollLeft = 0;
@@ -11,13 +26,12 @@ function scrollDocumentToTop() {
 }
 
 /**
- * A ogni cambio di route (pathname) la pagina parte dall’alto.
- * useLayoutEffect evita il “flash” a metà pagina prima del paint; scrollRestoration
- * evita che il browser riapplichi la posizione della route precedente (tipico in SPA).
- * L’hash (#contact-form su /contact) è gestito dopo dal useEffect della pagina Contatti.
+ * Ogni cambio route: cima pagina. Il focus sul link nel footer dopo la navigazione
+ * faceva scrollare la pagina verso il basso; focus su #app-main con preventScroll lo evita.
+ * Su /contact#contact-form niente scroll ritardato così non si sovrascrive lo scroll al modulo.
  */
 export default function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
     if ("scrollRestoration" in history) {
@@ -26,12 +40,28 @@ export default function ScrollToTop() {
   }, []);
 
   useLayoutEffect(() => {
+    const skipLateScroll = pathname === "/contact" && hash === "#contact-form";
+
+    moveFocusToMainWithoutScroll();
     scrollDocumentToTop();
-    const id = window.requestAnimationFrame(() => {
+
+    const raf = window.requestAnimationFrame(() => {
       scrollDocumentToTop();
     });
-    return () => window.cancelAnimationFrame(id);
-  }, [pathname]);
+
+    let timeoutId = null;
+    if (!skipLateScroll) {
+      timeoutId = window.setTimeout(() => {
+        moveFocusToMainWithoutScroll();
+        scrollDocumentToTop();
+      }, 120);
+    }
+
+    return () => {
+      window.cancelAnimationFrame(raf);
+      if (timeoutId != null) window.clearTimeout(timeoutId);
+    };
+  }, [pathname, hash]);
 
   return null;
 }
