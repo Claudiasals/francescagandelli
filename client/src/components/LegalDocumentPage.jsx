@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Pencil, Check, X } from "phosphor-react";
+import { Link } from "react-router-dom";
+import { Pencil, Check, X, ArrowLeft } from "phosphor-react";
 import EditablePageText from "./EditablePageText.jsx";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 
@@ -126,6 +127,19 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
 
         {isAdmin && (
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+            <Link
+              to="/settings"
+              className="btn-edit-gallery shrink-0"
+              title="Torna alle impostazioni"
+              aria-label="Torna alle impostazioni"
+              onClick={(e) => {
+                if (editing && dirty && !window.confirm("Hai modifiche non salvate. Tornare alle impostazioni?")) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              <ArrowLeft size={22} weight="duotone" className="text-white" />
+            </Link>
             {editing && (
               <button
                 type="button"
