@@ -9,7 +9,7 @@ import { API_BASE } from "../config/api.js";
 const API = API_BASE;
 
 const introClass =
-  "text-sm font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase break-words [overflow-wrap:anywhere]";
+  "text-sm font-display font-extralight tracking-widest uppercase whitespace-pre-wrap text-black !uppercase break-words [overflow-wrap:anywhere]";
 
 /** Estrae lo username dal link Instagram (es. …/francescagandelli_ph/). */
 function instagramUsernameFromUrl(url) {
@@ -226,7 +226,7 @@ const Contact = () => {
               <EditablePageText
                 value={editFormLead}
                 onChange={setEditFormLead}
-                className="text-base font-extralight leading-relaxed text-[var(--color-verdolight)]"
+                className="text-base font-extralight leading-relaxed whitespace-pre-wrap break-words text-[var(--color-verdolight)] [overflow-wrap:anywhere]"
                 aria-label="Testo sopra il modulo di contatto"
               />
             </div>
@@ -247,7 +247,7 @@ const Contact = () => {
             onSubmit={handleSubmit}
             className="flex w-full min-w-0 max-w-full flex-col gap-4 pt-2 box-border"
           >
-            <p className="text-base font-extralight text-[var(--color-verdolight)] break-words [overflow-wrap:anywhere]">
+            <p className="text-base font-extralight whitespace-pre-wrap break-words text-[var(--color-verdolight)] [overflow-wrap:anywhere]">
               {formLeadText}
             </p>
 

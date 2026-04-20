@@ -1,81 +1,46 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-
-function placeCaretAtEnd(el) {
-  if (!el) return;
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  range.collapse(false);
-  const sel = window.getSelection();
-  if (!sel) return;
-  sel.removeAllRanges();
-  sel.addRange(range);
-}
+import { useLayoutEffect, useRef } from "react";
 
 /**
- * Testo modificabile con lo stesso aspetto della vista pubblica (niente box textarea).
- * Cursore di inserimento (caret) in verde del sito, con leggera pulsazione per evidenziare l’editing.
+ * Testo modificabile: textarea controllata così a capi e spazi coincidono con il valore salvato
+ * (contentEditable altera il DOM e non è fedele a \n / spazi).
+ * Altezza si adatta al contenuto; stessi stili tipografici della vista pubblica.
  */
 const EditablePageText = ({ value, onChange, className = "", "aria-label": ariaLabel }) => {
   const ref = useRef(null);
 
-  useEffect(() => {
+  const adjustHeight = () => {
     const el = ref.current;
     if (!el) return;
-    if (document.activeElement === el) return;
-    const next = value ?? "";
-    if (el.textContent !== next) {
-      el.textContent = next;
-    }
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
+  useLayoutEffect(() => {
+    adjustHeight();
   }, [value]);
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    el.textContent = value ?? "";
     requestAnimationFrame(() => {
       el.focus();
-      placeCaretAtEnd(el);
+      const len = (value ?? "").length;
+      el.setSelectionRange(len, len);
     });
   }, []);
 
-  const handleInput = () => {
-    const el = ref.current;
-    if (!el) return;
-    onChange(el.textContent ?? "");
-  };
-
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const t = e.clipboardData.getData("text/plain");
-    if (document.queryCommandSupported?.("insertText")) {
-      document.execCommand("insertText", false, t);
-    } else {
-      const el = ref.current;
-      if (!el) return;
-      const sel = window.getSelection();
-      if (!sel?.rangeCount) return;
-      const range = sel.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(document.createTextNode(t));
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      handleInput();
-    }
-  };
-
   return (
-    <div
+    <textarea
       ref={ref}
-      role="textbox"
-      tabIndex={0}
-      contentEditable
-      suppressContentEditableWarning
-      spellCheck={false}
+      value={value ?? ""}
+      onChange={(e) => {
+        onChange(e.target.value);
+        requestAnimationFrame(adjustHeight);
+      }}
       aria-label={ariaLabel}
-      className={`editable-page-text-inner w-full max-w-full min-w-0 border-0 bg-transparent p-0 outline-none ${className}`}
-      onInput={handleInput}
-      onPaste={handlePaste}
+      rows={1}
+      spellCheck={false}
+      className={`editable-page-text-inner w-full max-w-full min-h-[1.35em] min-w-0 resize-none overflow-hidden border-0 bg-transparent p-0 outline-none whitespace-pre-wrap [overflow-wrap:anywhere] ${className}`}
     />
   );
 };

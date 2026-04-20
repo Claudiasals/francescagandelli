@@ -9,7 +9,7 @@ import { API_BASE } from "../config/api.js";
 const API = API_BASE;
 
 const legalBodyClass =
-  "text-sm normal-case font-extralight leading-relaxed text-black tracking-normal";
+  "text-sm normal-case font-extralight leading-relaxed text-black tracking-normal whitespace-pre-wrap break-words [overflow-wrap:anywhere]";
 
 function splitParagraphs(body) {
   return body.split(/\n\n+/).filter((p) => p.length > 0);

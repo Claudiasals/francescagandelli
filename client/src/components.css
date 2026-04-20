@@ -171,20 +171,20 @@
       }
     }
 
-    .editable-page-text-inner[contenteditable="true"] {
+    .editable-page-text-inner {
       cursor: text;
       caret-color: var(--color-verdolight);
       min-height: 1.35em;
       width: 100%;
     }
 
-    .editable-page-text-inner[contenteditable="true"]:focus {
+    .editable-page-text-inner:focus {
       outline: none;
       animation: editable-caret-soft-pulse 1.05s ease-in-out infinite;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .editable-page-text-inner[contenteditable="true"]:focus {
+      .editable-page-text-inner:focus {
         animation: none;
       }
     }
