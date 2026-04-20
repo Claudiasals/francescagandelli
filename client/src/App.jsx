@@ -3,6 +3,7 @@ import { SiteSettingsProvider } from "./context/SiteSettingsContext.jsx";
 
 // Pagine
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 import Login from "./pages/Login";
 import Footer from "./components/Footer";
 import CookieConsentBanner from "./components/CookieConsentBanner.jsx";
@@ -24,6 +25,8 @@ const App = () => {
     <main className="flex min-h-screen w-full min-w-0 flex-col font-sans text-[var(--color-black)] bg-[var(--color-white)] overflow-x-clip">
 
       <Navbar/>
+
+      <ScrollToTop />
 
       {/* CONTENUTO DINAMICO */}
       <Routes>
