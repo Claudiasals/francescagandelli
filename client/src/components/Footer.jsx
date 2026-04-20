@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <>
-            <footer className="mt-auto p-6 text-center overflow-visible">
+            <footer className="mt-12 shrink-0 p-6 text-center overflow-visible">
                 <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
                     <a
                         href={instagramUrl}

@@ -28,26 +28,26 @@ const App = () => {
 
       <ScrollToTop />
 
-      {/* CONTENUTO DINAMICO */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/family" element={<GalleryPage />} />
-        <Route path="/portrait" element={<GalleryPage />} />
-        <Route path="/personal-branding" element={<GalleryPage />} />
-        <Route path="/storytelling" element={<GalleryPage />} />
-        <Route path="/gallery/:slug" element={<GalleryPage />} />
+      {/* CONTENUTO DINAMICO: flex-1 riempie l’altezza così il footer resta in basso; il margine del footer crea spazio sopra */}
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/family" element={<GalleryPage />} />
+          <Route path="/portrait" element={<GalleryPage />} />
+          <Route path="/personal-branding" element={<GalleryPage />} />
+          <Route path="/storytelling" element={<GalleryPage />} />
+          <Route path="/gallery/:slug" element={<GalleryPage />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/settings" element={<Settings />} />
 
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/cookie-policy" element={<CookiePolicy />} />
-        <Route path="/terms-of-service" element={<TermsOfService />} />
-
-
-      </Routes>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+        </Routes>
+      </div>
 
       <Footer />
 
