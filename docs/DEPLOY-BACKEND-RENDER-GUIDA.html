@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guida deploy backend su Render (principianti)</title>
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --muted: #444;
+      --border: #ccc;
+      --bg-code: #f5f5f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.45;
+      color: var(--text);
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+    h1 {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-top: 0;
+    }
+    .print-hint {
+      font-family: system-ui, sans-serif;
+      font-size: 0.85rem;
+      background: #e8f4fc;
+      border: 1px solid #7eb8da;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-family: system-ui, sans-serif;
+      font-size: 1.2rem;
+      margin-top: 1.75rem;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-family: system-ui, sans-serif;
+      font-size: 1.05rem;
+      margin-top: 1.25rem;
+      page-break-after: avoid;
+    }
+    p, li { margin: 0.5rem 0; }
+    ul { padding-left: 1.25rem; }
+    a { color: #0b57d0; }
+    code, .mono {
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.92em;
+      background: var(--bg-code);
+      padding: 0.12em 0.35em;
+      border-radius: 3px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: system-ui, sans-serif;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f0f0f0; }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    .toc { font-family: system-ui, sans-serif; font-size: 0.95rem; }
+    .toc ol { margin: 0.5rem 0; padding-left: 1.25rem; }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    @media print {
+      body { max-width: none; padding: 0; font-size: 10.5pt; }
+      .print-hint { border: 1px dashed #666; background: #fafafa; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="print-hint"><strong>Salvare come PDF:</strong> nel browser apri il menu <strong>File → Stampa</strong>, scegli <strong>Salva come PDF</strong> (o “Microsoft Print to PDF”) come stampante, poi salva. Su macOS: <strong>⌘P → PDF → Salva come PDF</strong>.</p>
+
+  <h1>Guida per principianti: deploy del backend su Render.com</h1>
+
+  <p>Questa guida spiega passo passo come pubblicare online il <strong>server Node.js</strong> (Express) del progetto, dopo aver già messo il <strong>frontend</strong> su Netlify. È pensata per chi non ha mai fatto il deploy di un backend.</p>
+
+  <hr />
+
+  <h2>Indice</h2>
+  <nav class="toc">
+    <ol>
+      <li><a href="#s1">Concetti base: cosa stai facendo</a></li>
+      <li><a href="#s2">Cos’è Nodemailer</a></li>
+      <li><a href="#s3">Cosa serve prima di iniziare</a></li>
+      <li><a href="#s4">MongoDB Atlas (database in cloud)</a></li>
+      <li><a href="#s5">Render.com: creare il Web Service</a></li>
+      <li><a href="#s6">Variabili d’ambiente: elenco e significato</a></li>
+      <li><a href="#s7">CORS spiegato semplice</a></li>
+      <li><a href="#s8">Collegare il frontend (Netlify) al backend</a></li>
+      <li><a href="#s9">Checklist finale e problemi comuni</a></li>
+    </ol>
+  </nav>
+
+  <hr />
+
+  <h2 id="s1">1. Concetti base: cosa stai facendo</h2>
+
+  <h3>Frontend e backend sono due programmi diversi</h3>
+  <ul>
+    <li><strong>Frontend</strong> (React su Netlify): sono i file che il <strong>browser</strong> scarica (HTML, JavaScript, CSS). Netlify li serve come un sito “statico”. Non esegue il tuo codice Node.</li>
+    <li><strong>Backend</strong> (Express su Render): è un <strong>programma che gira su un computer remoto</strong> (un server) sempre acceso (o quasi). Risponde alle richieste tipo “dammi le foto della galleria”, “effettua login”, “salva questa immagine”.</li>
+  </ul>
+  <p>Finché il backend resta solo sul tuo PC (<code>http://localhost:5000</code>), <strong>solo tu</strong> puoi usarlo. <strong>Deploy</strong> significa: installare e avviare quel programma su una macchina di un fornitore (qui <strong>Render</strong>), così ottiene un indirizzo pubblico tipo <code>https://nome-servizio.onrender.com</code>.</p>
+
+  <h3>Perché Render</h3>
+  <p>Render è un servizio che:</p>
+  <ul>
+    <li>prende il codice dal tuo <strong>GitHub</strong>;</li>
+    <li>esegue <code>npm install</code> e avvia il server con <code>npm start</code>;</li>
+    <li>ti dà <strong>HTTPS</strong> e un <strong>URL</strong> stabile.</li>
+  </ul>
+  <p>Esistono alternative (Railway, Fly.io, VPS): la logica è simile (codice + variabili d’ambiente + avvio).</p>
+
+  <h3>Monorepo: cartella <code>server</code></h3>
+  <p>Il repository contiene più cartelle. Il backend sta in <strong><code>server/</code></strong>. Su Render devi dire <strong>Root Directory = <code>server</code></strong>, così i comandi <code>npm install</code> e <code>npm start</code> girano <strong>dentro</strong> quella cartella, dove c’è il <code>package.json</code> del backend.</p>
+
+  <hr />
+
+  <h2 id="s2">2. Cos’è Nodemailer</h2>
+  <p><strong>Nodemailer</strong> è una <strong>libreria Node.js</strong> per <strong>inviare email</strong> dal server (non è Gmail né un sito: è codice che gira sul backend).</p>
+  <p>Nel progetto viene usata nella rotta del <strong>form Contatti</strong>: quando un visitatore compila il modulo, il backend riceve nome, email e messaggio e <strong>manda un’email</strong> tramite <strong>SMTP</strong> (di solito Gmail o altro provider) verso l’indirizzo configurato.</p>
+  <ul>
+    <li><strong>Non</strong> è un servizio di posta: è il “ponte” nel codice che parla con un server SMTP usando utente e password (o password per app) che metti nelle <strong>variabili d’ambiente</strong> (<code>EMAIL_USER</code>, <code>EMAIL_PASS</code>).</li>
+    <li>Senza Nodemailer nel <code>package.json</code>, il server potrebbe <strong>andare in errore all’avvio</strong> quando carica il file che importa Nodemailer.</li>
+  </ul>
+  <p>Per questo nel progetto sono stati aggiunti lo script <strong><code>npm start</code></strong> (<code>node src/server.js</code>) e la dipendenza <strong>nodemailer</strong>, così Render può avviare il server in produzione e il form può inviare mail.</p>
+
+  <hr />
+
+  <h2 id="s3">3. Cosa serve prima di iniziare</h2>
+  <ul>
+    <li>Account <strong>GitHub</strong> con il repository aggiornato (stesso repo del frontend).</li>
+    <li>Account <strong>Render</strong> (gratuito possibile, con limiti).</li>
+    <li>Account <strong>MongoDB Atlas</strong> (tier gratuito ok per iniziare) con stringa di connessione.</li>
+    <li>Account <strong>Cloudinary</strong> (caricamento immagini): nome cloud, API key, API secret.</li>
+    <li>Per il form contatti: coppia <strong>email SMTP</strong> (es. Gmail + <strong>password per le app</strong>, non la password normale dell’account Google).</li>
+  </ul>
+
+  <hr />
+
+  <h2 id="s4">4. MongoDB Atlas (database in cloud)</h2>
+  <p>Il backend <strong>non</strong> salva i dati “dentro Render”: usa <strong>MongoDB</strong>. In cloud, Atlas ospita il database.</p>
+  <h3>Passi essenziali</h3>
+  <ol>
+    <li>Crea un <strong>cluster</strong> (se non ce l’hai già).</li>
+    <li>Crea un <strong>utente database</strong> con username e password (salvali in posto sicuro).</li>
+    <li><strong>Network Access</strong>: consenti le connessioni da Internet verso il cluster. Per iniziare è comune <strong>Allow access from anywhere</strong> (<code>0.0.0.0/0</code>). La sicurezza dipende anche da <strong>password forte</strong> e da <strong>MONGO_URI</strong> segreta su Render.</li>
+    <li>Copia la <strong>connection string</strong> (URI). Sostituisci <code>&lt;password&gt;</code> con la password dell’utente DB (se ha caratteri speciali, può servire l’<strong>URL encoding</strong>). La userai come <strong><code>MONGO_URI</code></strong> su Render.</li>
+  </ol>
+  <p>Se Atlas blocca gli IP da cui si connette Render, il server non parte o va in errore: controlla sempre <strong>Network Access</strong>.</p>
+
+  <hr />
+
+  <h2 id="s5">5. Render.com: creare il Web Service</h2>
+  <ol>
+    <li>Vai su <a href="https://dashboard.render.com">dashboard.render.com</a> e accedi.</li>
+    <li><strong>New +</strong> → <strong>Web Service</strong>.</li>
+    <li>Collega il <strong>repository GitHub</strong> (autorizza Render se richiesto) e scegli il repo del progetto.</li>
+    <li>Compila i campi principali (tabella sotto).</li>
+    <li><strong>Piano Free</strong>: utile per prove; il servizio può <strong>andare in sleep</strong>. La prima richiesta dopo lo sleep può richiedere decine di secondi.</li>
+    <li><strong>Environment</strong>: aggiungi le variabili della sezione 6 (prima o subito dopo; puoi rifare <strong>Manual Deploy</strong> dopo modifiche).</li>
+    <li>Clicca <strong>Create Web Service</strong> e attendi i log. Se tutto va bene, aprendo la root nel browser vedrai un messaggio tipo che il server è OK.</li>
+  </ol>
+
+  <table>
+    <thead>
+      <tr><th>Campo</th><th>Valore consigliato</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Name</strong></td><td>Es. <code>francescagandelli-api</code> → URL <code>https://nome.onrender.com</code></td></tr>
+      <tr><td><strong>Region</strong></td><td>Es. Frankfurt (UE) se i visitatori sono in Europa</td></tr>
+      <tr><td><strong>Branch</strong></td><td><code>main</code> (o il branch di produzione)</td></tr>
+      <tr><td><strong>Root Directory</strong></td><td><strong><code>server</code></strong></td></tr>
+      <tr><td><strong>Runtime</strong></td><td>Node</td></tr>
+      <tr><td><strong>Build Command</strong></td><td><code>npm install</code></td></tr>
+      <tr><td><strong>Start Command</strong></td><td><code>npm start</code></td></tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <h2 id="s6">6. Variabili d’ambiente: elenco e significato</h2>
+  <p>Sono <strong>coppie nome = valore</strong> che <strong>non</strong> vanno nel codice pubblico su GitHub. Render le passa al processo Node all’avvio.</p>
+
+  <table>
+    <thead>
+      <tr><th>Nome</th><th>Cosa è</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>MONGO_URI</code></td><td>Stringa di connessione completa a MongoDB Atlas.</td></tr>
+      <tr><td><code>JWT_SECRET</code></td><td>Chiave segreta lunga e casuale per firmare i token di login admin. <strong>Segreta</strong>; non nel frontend.</td></tr>
+      <tr><td><code>CLOUDINARY_CLOUD_NAME</code></td><td>Identificativo account Cloudinary.</td></tr>
+      <tr><td><code>CLOUDINARY_API_KEY</code></td><td>Chiave API Cloudinary.</td></tr>
+      <tr><td><code>CLOUDINARY_API_SECRET</code></td><td>Segreto API Cloudinary. <strong>Mai</strong> nel frontend.</td></tr>
+      <tr><td><code>EMAIL_USER</code></td><td>Email per autenticazione SMTP (es. Gmail).</td></tr>
+      <tr><td><code>EMAIL_PASS</code></td><td>Password SMTP; con Gmail spesso <strong>password per le app</strong>.</td></tr>
+      <tr><td><code>CONTACT_MAIL_TO</code></td><td>(Opzionale) Destinazione messaggi form se serve fallback.</td></tr>
+      <tr><td><code>ALLOWED_ORIGINS</code></td><td>Origini consentite per CORS, separate da <strong>virgola</strong>. Es. <code>https://tuosito.netlify.app</code></td></tr>
+      <tr><td><code>PORT</code></td><td>Su Render <strong>non serve impostarla</strong>. Il codice usa <code>process.env.PORT || 5000</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <h2 id="s7">7. CORS spiegato semplice</h2>
+  <p>Il <strong>browser</strong>, per sicurezza, blocca molte richieste da un sito (es. Netlify) verso un altro dominio (es. Render), a meno che il <strong>server</strong> dica: “accetto richieste da questo dominio”. Questo meccanismo si chiama <strong>CORS</strong>.</p>
+  <p>Nel progetto il server accetta <code>http://localhost:5173</code> e <code>http://localhost:4173</code> (sviluppo Vite) più tutti gli URL in <strong><code>ALLOWED_ORIGINS</code></strong>.</p>
+  <p>Devi inserire l’URL <strong>esatto</strong> del sito Netlify (di solito <code>https://...</code>, senza slash finale), ad esempio:</p>
+  <p class="mono">https://francescagandelli-photographer.netlify.app</p>
+  <p>Se sbagli o ometti questa variabile, in console vedrai errori tipo “blocked by CORS policy”.</p>
+
+  <hr />
+
+  <h2 id="s8">8. Collegare il frontend (Netlify) al backend</h2>
+  <p>Il frontend spesso punta ancora a <code>http://localhost:5000</code>. In produzione <strong>non funziona</strong>: il PC del visitatore non ha il tuo server locale.</p>
+  <p>Le chiamate API devono andare all’URL Render, es. <code>https://TUO-SERVIZIO.onrender.com</code>. Le rotte iniziano con <code>/api/...</code>, quindi la base tipica è:</p>
+  <p class="mono">https://TUO-SERVIZIO.onrender.com/api</p>
+  <p><strong>Passi consigliati:</strong></p>
+  <ol>
+    <li>Prova nel browser: <code>https://TUO-SERVIZIO.onrender.com/</code> → risposta di testo dal server.</li>
+    <li>Aggiorna il frontend con un’unica base URL (meglio variabile <strong><code>VITE_API_URL</code></strong> su Netlify).</li>
+    <li><strong>Rifai il deploy</strong> su Netlify dopo le modifiche.</li>
+  </ol>
+  <p>Finché il frontend punta a localhost, il sito Netlify può aprirsi ma login, gallerie e form non useranno il backend reale.</p>
+
+  <hr />
+
+  <h2 id="s9">9. Checklist finale e problemi comuni</h2>
+  <h3>Checklist</h3>
+  <ul>
+    <li>Atlas: cluster, utente DB, Network Access (es. <code>0.0.0.0/0</code> per iniziare).</li>
+    <li>Render: Root <code>server</code>, Build <code>npm install</code>, Start <code>npm start</code>.</li>
+    <li>Tutte le variabili d’ambiente su Render.</li>
+    <li><code>ALLOWED_ORIGINS</code> = URL Netlify esatto.</li>
+    <li>Test URL root Render nel browser.</li>
+    <li>Frontend con URL API di produzione + nuovo deploy Netlify.</li>
+  </ul>
+
+  <h3>Problemi comuni</h3>
+  <table>
+    <thead>
+      <tr><th>Sintomo</th><th>Possibile causa</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Build fallisce su Render</td><td>Root directory sbagliata, dipendenze mancanti.</td></tr>
+      <tr><td>Server crasha all’avvio</td><td><code>MONGO_URI</code> errata, Atlas blocca IP, <code>JWT_SECRET</code> mancante.</td></tr>
+      <tr><td>Errori CORS</td><td><code>ALLOWED_ORIGINS</code> errata o assente; www vs non-www.</td></tr>
+      <tr><td>Form email non parte</td><td><code>EMAIL_USER</code> / <code>EMAIL_PASS</code> errati.</td></tr>
+      <tr><td>Upload immagini fallisce</td><td>Variabili Cloudinary errate.</td></tr>
+      <tr><td>Prima richiesta lentissima</td><td>Piano free Render: cold start dopo sleep.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Modifiche previste nel codice backend (riferimento)</h3>
+  <ul>
+    <li><code>"start": "node src/server.js"</code> in <code>server/package.json</code>.</li>
+    <li>Dipendenza <strong>nodemailer</strong>.</li>
+    <li>CORS con <strong><code>ALLOWED_ORIGINS</code></strong> (lista separata da virgole) oltre ai localhost.</li>
+  </ul>
+  <p>Committa e pusha queste modifiche su GitHub prima del deploy su Render.</p>
+
+  <footer>
+    <p>Documento di supporto al deploy backend su Render.com con frontend su Netlify. Versione HTML stampabile.</p>
+  </footer>
+</body>
+</html>
