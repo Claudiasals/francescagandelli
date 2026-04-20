@@ -391,6 +391,30 @@ const Home = () => {
     setReorderMode(false);
   };
 
+  /** Annulla dal gruppo in alto a destra (stesso ordine X · ✓ · matita delle altre pagine testo). */
+  const handleToolbarDismiss = () => {
+    if (reorderMode) {
+      finishReorderMode();
+      return;
+    }
+    if (showForm) {
+      const partial =
+        categoryTitle || categoryDescription || categoryImage || categoryImagePreview;
+      if (partial && !window.confirm("Annullare la nuova categoria?")) return;
+      resetForm();
+      setShowForm(false);
+      return;
+    }
+    if (editMode) {
+      if (hasPendingWork() && !window.confirm("Annullare le modifiche non salvate?")) return;
+      revokeEditPreviews(categoryEdits);
+      setCategoryEdits({});
+      resetForm();
+      setShowForm(false);
+      setEditMode(false);
+    }
+  };
+
   return (
     <>
       <section className="relative w-full h-64 md:h-96 overflow-hidden">
@@ -432,23 +456,34 @@ const Home = () => {
       <section className="px-8 pb-8 pt-[22px] md:mt-15 mb-16">
         <div className="flex flex-col gap-2">
           {isAdmin && (
-            <div className="flex flex-wrap gap-2 items-center justify-end">
+            <div className="flex flex-wrap items-center justify-end gap-2">
               {(editMode || showForm || reorderMode) && (
-                <button
-                  type="button"
-                  className="btn-confirm-icon"
-                  onClick={() => {
-                    if (reorderMode) finishReorderMode();
-                    else saveAllChanges();
-                  }}
-                  title={
-                    reorderMode
-                      ? "Chiudi riordino (l’ordine è già salvato a ogni spostamento)"
-                      : "Applica tutte le modifiche alle categorie e la nuova categoria (se presente)"
-                  }
-                >
-                  <Check size={22} weight="bold" />
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="btn-cancel-icon"
+                    onClick={handleToolbarDismiss}
+                    title="Annulla"
+                    aria-label="Annulla"
+                  >
+                    <X size={18} weight="bold" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-confirm-icon"
+                    onClick={() => {
+                      if (reorderMode) finishReorderMode();
+                      else saveAllChanges();
+                    }}
+                    title={
+                      reorderMode
+                        ? "Chiudi riordino (l’ordine è già salvato a ogni spostamento)"
+                        : "Applica tutte le modifiche alle categorie e la nuova categoria (se presente)"
+                    }
+                  >
+                    <Check size={22} weight="bold" />
+                  </button>
+                </>
               )}
               <button
                 type="button"

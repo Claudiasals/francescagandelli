@@ -120,13 +120,13 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
 
   return (
     <section className="max-w-3xl mx-auto p-8 space-y-4">
-      <div className="flex flex-wrap gap-2 justify-between items-start">
-        <h1 className="font-display font-extralight text-base tracking-widest uppercase text-[var(--color-verdolight)] mb-6">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <h1 className="min-w-0 flex-1 font-display font-extralight text-base tracking-widest uppercase text-[var(--color-verdolight)]">
           {title}
         </h1>
 
         {isAdmin && (
-          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+          <div className="flex shrink-0 flex-nowrap items-center justify-end gap-2 self-start p-2">
             <Link
               to="/settings"
               className="btn-edit-gallery shrink-0"
@@ -141,15 +141,26 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
               <ArrowLeft size={22} weight="duotone" className="text-white" />
             </Link>
             {editing && (
-              <button
-                type="button"
-                className="btn-confirm-icon"
-                onClick={handleSave}
-                disabled={!dirty}
-                title="Salva le modifiche"
-              >
-                <Check size={22} weight="bold" />
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn-cancel-icon"
+                  onClick={cancelEdit}
+                  title="Annulla"
+                  aria-label="Annulla"
+                >
+                  <X size={18} weight="bold" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="btn-confirm-icon"
+                  onClick={handleSave}
+                  disabled={!dirty}
+                  title="Salva le modifiche"
+                >
+                  <Check size={22} weight="bold" />
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -179,17 +190,6 @@ const LegalDocumentPage = ({ title, field, mailtoEmail = false }) => {
             className={legalBodyClass}
             aria-label={`Modifica ${title}`}
           />
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className="btn-cancel-icon"
-              onClick={cancelEdit}
-              title="Annulla"
-              aria-label="Annulla"
-            >
-              <X size={18} weight="bold" aria-hidden />
-            </button>
-          </div>
         </div>
       ) : (
         <div className="space-y-4">

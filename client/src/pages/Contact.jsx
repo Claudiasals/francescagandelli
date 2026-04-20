@@ -176,17 +176,28 @@ const Contact = () => {
         </h2>
 
         {isAdmin && (
-          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+          <div className="flex shrink-0 flex-nowrap items-center justify-end gap-2 self-start p-2">
             {editing && (
-              <button
-                type="button"
-                className="btn-confirm-icon"
-                onClick={handleSaveText}
-                disabled={!textDirty}
-                title="Salva le modifiche"
-              >
-                <Check size={22} weight="bold" />
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn-cancel-icon"
+                  onClick={cancelEdit}
+                  title="Annulla"
+                  aria-label="Annulla"
+                >
+                  <X size={18} weight="bold" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="btn-confirm-icon"
+                  onClick={handleSaveText}
+                  disabled={!textDirty}
+                  title="Salva le modifiche"
+                >
+                  <Check size={22} weight="bold" />
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -218,17 +229,6 @@ const Contact = () => {
                 className="text-base font-extralight leading-relaxed text-[var(--color-verdolight)]"
                 aria-label="Testo sopra il modulo di contatto"
               />
-            </div>
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                className="btn-cancel-icon"
-                onClick={cancelEdit}
-                title="Annulla"
-                aria-label="Annulla"
-              >
-                <X size={18} weight="bold" aria-hidden />
-              </button>
             </div>
           </div>
         ) : (

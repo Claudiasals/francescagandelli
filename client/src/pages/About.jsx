@@ -101,17 +101,28 @@ const About = () => {
         </h2>
 
         {isAdmin && (
-          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 p-2">
+          <div className="flex shrink-0 flex-nowrap items-center justify-end gap-2 self-start p-2">
             {editing && (
-              <button
-                type="button"
-                className="btn-confirm-icon"
-                onClick={handleSaveText}
-                disabled={!textDirty}
-                title="Salva le modifiche"
-              >
-                <Check size={22} weight="bold" />
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn-cancel-icon"
+                  onClick={cancelEdit}
+                  title="Annulla"
+                  aria-label="Annulla"
+                >
+                  <X size={18} weight="bold" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="btn-confirm-icon"
+                  onClick={handleSaveText}
+                  disabled={!textDirty}
+                  title="Salva le modifiche"
+                >
+                  <Check size={22} weight="bold" />
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -130,24 +141,13 @@ const About = () => {
       ) : (
         <>
           {isAdmin && editing ? (
-            <div className="space-y-4 w-full">
+            <div className="w-full space-y-4">
               <EditablePageText
                 value={editText}
                 onChange={setEditText}
                 className={`leading-relaxed ${aboutTextClassName}`}
                 aria-label="Testo Chi sono"
               />
-              <div className="flex justify-end gap-4">
-                <button
-                  type="button"
-                  className="btn-cancel-icon"
-                  onClick={cancelEdit}
-                  title="Annulla"
-                  aria-label="Annulla"
-                >
-                  <X size={18} weight="bold" aria-hidden />
-                </button>
-              </div>
             </div>
           ) : (
             <p className={aboutTextClassName}>{text}</p>
