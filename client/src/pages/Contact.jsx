@@ -280,17 +280,17 @@ const Contact = () => {
         )}
 
         {!(isAdmin && editing) && (
-          <div className="-mt-2 mb-12 flex min-w-0 w-full max-w-full flex-col gap-2">
+          <div className="-mt-2 mb-12 flex min-w-0 w-full max-w-full flex-col items-center gap-1.5 text-center">
             <a
               href={`mailto:${publicEmail}`}
-              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="block w-full max-w-full min-w-0 break-words text-sm text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               email: {publicEmail}
             </a>
 
             <a
               href={`tel:${phoneTel}`}
-              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="block w-full max-w-full min-w-0 break-words text-sm text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               telefono: {phoneDisplay}
             </a>
@@ -299,7 +299,7 @@ const Contact = () => {
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="block w-full max-w-full min-w-0 break-words text-sm text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               {instagramUser ? `Instagram: ${instagramUser}` : "Instagram"}
             </a>
