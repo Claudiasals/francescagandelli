@@ -88,8 +88,15 @@ const About = () => {
 
   return (
     <section className="about-section p-8 max-w-2xl mx-auto space-y-6">
-      <div className="flex flex-wrap gap-2 justify-between items-start">
-        <h2 className="font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
+      <div
+        className={
+          isAdmin
+            ? "grid grid-cols-[1fr_auto_1fr] items-center gap-x-2 gap-y-2"
+            : "grid grid-cols-1 justify-items-center"
+        }
+      >
+        {isAdmin ? <span className="min-w-0 shrink" aria-hidden /> : null}
+        <h2 className="text-center font-display font-extralight text-2xl tracking-widest uppercase text-verdoscuro">
           Chi Sono
         </h2>
 

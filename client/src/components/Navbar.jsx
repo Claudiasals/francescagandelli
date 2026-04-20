@@ -24,7 +24,7 @@ const Navbar = () => {
         <>
             <nav className="sticky top-0 z-50 flex items-center justify-between bg-white px-4 py-2.5 shadow sm:px-8">
                 <Link to="/" className="flex min-w-0 shrink cursor-pointer items-center gap-2">
-                    <h1 className="font-display text-2xl font-bold uppercase tracking-wide text-black sm:text-3xl sm:tracking-widest">
+                    <h1 className="font-display text-2xl !font-extralight uppercase tracking-widest text-black">
                         FRANCESCA GANDELLI
                     </h1>
                 </Link>
