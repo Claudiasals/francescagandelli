@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Pencil, Check, X } from "phosphor-react";
 import EditablePageText from "../components/EditablePageText.jsx";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 /** Stesso aspetto del testo pubblicato (vedi <p> sotto). !uppercase vince la regola globale su textarea in index.css. */
 const aboutTextClassName =

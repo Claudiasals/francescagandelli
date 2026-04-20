@@ -3,7 +3,9 @@ import { useLocation, useParams } from "react-router-dom";
 import { Pencil, ArrowsClockwise, Plus, Trash, Check, CircleNotch, X } from "phosphor-react";
 import { lockBodyScroll, unlockBodyScroll } from "../utils/bodyScrollLock.js";
 
-const API = "http://localhost:5000/api/gallery";
+import { API_BASE } from "../config/api.js";
+
+const API = `${API_BASE}/gallery`;
 
 /**
  * Galleria unificata: didascalie solo in MAIUSCOLO; testo come Privacy/Cookie/Termini (paragrafo, senza riquadri).

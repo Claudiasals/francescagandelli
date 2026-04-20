@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import Card from "../components/Card";
 import { Pencil, ArrowsClockwise, Plus, Check, X } from "phosphor-react";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 const Home = () => {
   const isAdmin = !!localStorage.getItem("adminToken");

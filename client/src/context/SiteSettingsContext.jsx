@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { DEFAULT_SITE_CONTACT } from "../constants/contact.js";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 const SiteSettingsContext = createContext({
   ...DEFAULT_SITE_CONTACT,

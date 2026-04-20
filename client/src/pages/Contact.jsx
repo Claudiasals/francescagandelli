@@ -4,7 +4,9 @@ import { useLocation } from "react-router-dom";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 import EditablePageText from "../components/EditablePageText.jsx";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 const introClass =
   "font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase";

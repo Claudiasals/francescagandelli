@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 /** Solo cifre nazionali (10), da phoneTel o phoneDisplay salvati. */
 function national10FromStored(phoneTel, phoneDisplay) {

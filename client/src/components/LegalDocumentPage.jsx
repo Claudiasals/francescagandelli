@@ -3,7 +3,9 @@ import { Pencil, Check, X } from "phosphor-react";
 import EditablePageText from "./EditablePageText.jsx";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 
-const API = "http://localhost:5000/api";
+import { API_BASE } from "../config/api.js";
+
+const API = API_BASE;
 
 const legalBodyClass =
   "normal-case font-extralight leading-relaxed text-black tracking-normal";
