@@ -9,7 +9,7 @@ import { API_BASE } from "../config/api.js";
 const API = API_BASE;
 
 const introClass =
-  "font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase break-words [overflow-wrap:anywhere]";
+  "text-sm font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase break-words [overflow-wrap:anywhere]";
 
 /** Estrae lo username dal link Instagram (es. …/francescagandelli_ph/). */
 function instagramUsernameFromUrl(url) {
@@ -208,7 +208,7 @@ const Contact = () => {
               <EditablePageText
                 value={editFormLead}
                 onChange={setEditFormLead}
-                className="text-lg font-extralight leading-relaxed text-[var(--color-verdolight)]"
+                className="text-base font-extralight leading-relaxed text-[var(--color-verdolight)]"
                 aria-label="Testo sopra il modulo di contatto"
               />
             </div>
@@ -240,7 +240,7 @@ const Contact = () => {
             onSubmit={handleSubmit}
             className="flex w-full min-w-0 max-w-full flex-col gap-4 pt-2 box-border"
           >
-            <p className="text-lg font-extralight text-[var(--color-verdolight)] break-words [overflow-wrap:anywhere]">
+            <p className="text-base font-extralight text-[var(--color-verdolight)] break-words [overflow-wrap:anywhere]">
               {formLeadText}
             </p>
 
@@ -283,14 +283,14 @@ const Contact = () => {
           <div className="-mt-2 mb-12 flex min-w-0 w-full max-w-full flex-col gap-2">
             <a
               href={`mailto:${publicEmail}`}
-              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               email: {publicEmail}
             </a>
 
             <a
               href={`tel:${phoneTel}`}
-              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               telefono: {phoneDisplay}
             </a>
@@ -299,7 +299,7 @@ const Contact = () => {
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-0 break-words text-lg text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
+              className="min-w-0 break-words text-base text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               {instagramUser ? `Instagram: ${instagramUser}` : "Instagram"}
             </a>

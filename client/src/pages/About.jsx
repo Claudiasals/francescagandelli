@@ -8,7 +8,7 @@ const API = API_BASE;
 
 /** Stesso aspetto del testo pubblicato (vedi <p> sotto). !uppercase vince la regola globale su textarea in index.css. */
 const aboutTextClassName =
-  "font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase";
+  "text-sm font-display font-extralight tracking-widest uppercase whitespace-pre-line text-black !uppercase";
 
 const About = () => {
   const isAdmin = !!localStorage.getItem("adminToken");
