@@ -50,16 +50,11 @@ transporter.verify((error, success) => {
  
 
 
-// Configurazione CORS: locale + eventuali origini da ALLOWED_ORIGINS (es. https://sito.netlify.app)
+// Configurazione CORS: sviluppo locale + frontend pubblicato su Netlify.
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4173",
   "https://francescagandelli.netlify.app",
-  ...(process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-    : []),
 ];
 
 // Middleware CORS per Express
