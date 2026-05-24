@@ -54,6 +54,8 @@ transporter.verify((error, success) => {
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4173",
+  "https://francescagandelli.netlify.app",
+  "https://francescagandelli.vercel.app",
   ...(process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(",")
         .map((s) => s.trim())
