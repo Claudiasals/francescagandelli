@@ -22,8 +22,6 @@ export function SiteSettingsProvider({ children }) {
       setSettings({
         publicEmail: data.publicEmail ?? DEFAULT_SITE_CONTACT.publicEmail,
         instagramUrl: data.instagramUrl ?? DEFAULT_SITE_CONTACT.instagramUrl,
-        phoneTel: data.phoneTel ?? DEFAULT_SITE_CONTACT.phoneTel,
-        phoneDisplay: data.phoneDisplay ?? DEFAULT_SITE_CONTACT.phoneDisplay,
       });
     } catch (e) {
       console.error("Site settings", e);

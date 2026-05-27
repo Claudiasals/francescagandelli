@@ -82,7 +82,7 @@ Se il sito è collegato al branch giusto, un **push** su Git può **ridistribuir
 
 ### 3.4 Impostazioni (ingranaggio)
 
-- Email pubblica, Instagram, telefono, **password admin** del sito, link legali.
+- Email pubblica, Instagram, **password admin** del sito, link legali.
 
 ---
 

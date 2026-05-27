@@ -20,7 +20,7 @@ function instagramUsernameFromUrl(url) {
 
 const Contact = () => {
   const isAdmin = !!localStorage.getItem("adminToken");
-  const { publicEmail, phoneTel, phoneDisplay, instagramUrl, refresh } = useSiteSettings();
+  const { publicEmail, instagramUrl, refresh } = useSiteSettings();
   const instagramUser = instagramUsernameFromUrl(instagramUrl);
   const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
@@ -52,7 +52,7 @@ const Contact = () => {
     loadContactPage();
   }, []);
 
-  /* Allinea email / telefono / Instagram a quanto salvato in Impostazioni (anche se aggiornati da un’altra scheda). */
+  /* Allinea email / Instagram a quanto salvato in Impostazioni (anche se aggiornati da un’altra scheda). */
   useEffect(() => {
     refresh();
   }, [refresh]);
@@ -293,13 +293,6 @@ const Contact = () => {
               className="block w-full max-w-full min-w-0 break-words text-sm text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
             >
               email: {publicEmail}
-            </a>
-
-            <a
-              href={`tel:${phoneTel}`}
-              className="block w-full max-w-full min-w-0 break-words text-sm text-black transition-colors duration-200 [overflow-wrap:anywhere] hover:text-[var(--color-verdolight)]"
-            >
-              telefono: {phoneDisplay}
             </a>
 
             <a

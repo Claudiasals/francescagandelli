@@ -6,58 +6,27 @@ import { API_BASE } from "../config/api.js";
 
 const API = API_BASE;
 
-/** Solo cifre nazionali (10), da phoneTel o phoneDisplay salvati. */
-function national10FromStored(phoneTel, phoneDisplay) {
-  const raw = String(phoneTel || phoneDisplay || "")
-    .replace(/\s/g, "")
-    .trim();
-  if (!raw) return "";
-  let d = raw.replace(/^\+/, "").replace(/\D/g, "");
-  if (d.startsWith("39")) d = d.slice(2);
-  return d.slice(0, 10);
-}
-
-function buildPhoneTel(national10) {
-  const d = national10.replace(/\D/g, "");
-  return d.length === 10 ? `+39${d}` : "";
-}
-
-/** Es. 3466106008 → +39 346 610 6008 */
-function buildPhoneDisplay(national10) {
-  const d = national10.replace(/\D/g, "").slice(0, 10);
-  if (d.length === 0) return "";
-  if (d.length <= 3) return `+39 ${d}`;
-  if (d.length <= 6) return `+39 ${d.slice(0, 3)} ${d.slice(3)}`;
-  return `+39 ${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6, 10)}`;
-}
-
 const Settings = () => {
   const navigate = useNavigate();
   const token = () => localStorage.getItem("adminToken");
-  const { publicEmail, instagramUrl, phoneTel, phoneDisplay, refresh } = useSiteSettings();
+  const { publicEmail, instagramUrl, refresh } = useSiteSettings();
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pwdMessage, setPwdMessage] = useState("");
 
-  const [email, setEmail] = useState("");
-  const [ig, setIg] = useState("");
-  /** Solo le 10 cifre dopo +39 (senza spazi). */
-  const [phoneNational10, setPhoneNational10] = useState("");
+  const [contactDraft, setContactDraft] = useState(null);
   const [contactMessage, setContactMessage] = useState("");
+
+  const email = contactDraft?.publicEmail ?? publicEmail;
+  const ig = contactDraft?.instagramUrl ?? instagramUrl;
 
   useEffect(() => {
     if (!token()) {
       navigate("/login", { replace: true });
     }
   }, [navigate]);
-
-  useEffect(() => {
-    setEmail(publicEmail);
-    setIg(instagramUrl);
-    setPhoneNational10(national10FromStored(phoneTel, phoneDisplay));
-  }, [publicEmail, instagramUrl, phoneTel, phoneDisplay]);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -97,13 +66,6 @@ const Settings = () => {
   const handleSaveContact = async (e) => {
     e.preventDefault();
     setContactMessage("");
-    const national = phoneNational10.replace(/\D/g, "");
-    if (national.length !== 10) {
-      setContactMessage("Inserisci le 10 cifre del cellulare (dopo +39).");
-      return;
-    }
-    const computedTel = buildPhoneTel(national);
-    const computedDisplay = buildPhoneDisplay(national);
     try {
       const res = await fetch(`${API}/site-settings`, {
         method: "PUT",
@@ -114,8 +76,6 @@ const Settings = () => {
         body: JSON.stringify({
           publicEmail: email.trim(),
           instagramUrl: ig.trim(),
-          phoneTel: computedTel,
-          phoneDisplay: computedDisplay,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -130,6 +90,7 @@ const Settings = () => {
       }
       setContactMessage("Impostazioni salvate.");
       await refresh();
+      setContactDraft(null);
     } catch (err) {
       console.error(err);
       setContactMessage("Errore di rete.");
@@ -197,7 +158,12 @@ const Settings = () => {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) =>
+              setContactDraft((prev) => ({
+                publicEmail: e.target.value,
+                instagramUrl: prev?.instagramUrl ?? instagramUrl,
+              }))
+            }
             className="border border-gray-300 rounded p-2"
           />
         </label>
@@ -206,31 +172,14 @@ const Settings = () => {
           <input
             type="url"
             value={ig}
-            onChange={(e) => setIg(e.target.value)}
+            onChange={(e) =>
+              setContactDraft((prev) => ({
+                publicEmail: prev?.publicEmail ?? publicEmail,
+                instagramUrl: e.target.value,
+              }))
+            }
             className="border border-gray-300 rounded p-2"
           />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-sm normal-case tracking-normal">Telefono</span>
-         
-          <div className="flex max-w-md items-center gap-2 rounded border border-gray-300 bg-white px-2">
-            <span className="shrink-0 text-sm normal-case tracking-normal text-verdoscuro">+39</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="tel-national"
-              value={phoneNational10}
-              onChange={(e) => setPhoneNational10(e.target.value.replace(/\D/g, "").slice(0, 10))}
-              className="min-w-0 flex-1 border-0 py-2 text-sm normal-case tracking-normal outline-none"
-              placeholder="3466106008"
-              maxLength={10}
-            />
-          </div>
-          {phoneNational10.replace(/\D/g, "").length > 0 && (
-            <p className="text-xs font-extralight normal-case tracking-normal text-gray-500">
-              Anteprima in pagina: {buildPhoneDisplay(phoneNational10) || "…"}
-            </p>
-          )}
         </label>
         {contactMessage && <p className="text-sm text-verdoscuro">{contactMessage}</p>}
         <button type="submit" className="btn-primary">

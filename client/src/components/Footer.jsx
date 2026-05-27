@@ -1,10 +1,10 @@
-import { InstagramLogo, Envelope, PhoneCall } from "phosphor-react";
+import { InstagramLogo, Envelope } from "phosphor-react";
 import { Link } from "react-router-dom";
 import EmailContactMenu from "./EmailContactMenu";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
 
 const Footer = () => {
-    const { instagramUrl, phoneTel } = useSiteSettings();
+    const { instagramUrl } = useSiteSettings();
 
     return (
         <>
@@ -22,9 +22,6 @@ const Footer = () => {
                         <InstagramLogo size={30} />
                     </a>
                     <EmailContactMenu Icon={Envelope} iconSize={30} />
-                    <a href={`tel:${phoneTel}`} className="icon-menu" aria-label="Telefono">
-                        <PhoneCall size={30} />
-                    </a>
                 </div>
                 <div className="mx-auto my-6 h-px w-[min(92%,28rem)] rounded-full bg-[var(--color-verdolight)]/45" />
                 <div className="my-3 text-[10px] font-extralight normal-case tracking-normal">

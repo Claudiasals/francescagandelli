@@ -1,4 +1,4 @@
-import { List, SignOut, Wrench, InstagramLogo, Envelope, PhoneCall, X } from "phosphor-react";
+import { List, SignOut, Wrench, InstagramLogo, Envelope, X } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSiteSettings } from "../context/SiteSettingsContext.jsx";
@@ -7,7 +7,7 @@ import { lockBodyScroll, unlockBodyScroll } from "../utils/bodyScrollLock.js";
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const isAdmin = !!localStorage.getItem("adminToken");
-    const { instagramUrl, phoneTel, publicEmail } = useSiteSettings();
+    const { instagramUrl, publicEmail } = useSiteSettings();
 
     const handleLogout = () => {
         localStorage.removeItem("adminToken");
@@ -142,14 +142,6 @@ const Navbar = () => {
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     <Envelope size={28} />
-                                </a>
-                                <a
-                                    href={`tel:${phoneTel}`}
-                                    className="icon-menu mx-0 inline-flex p-1"
-                                    aria-label="Telefono"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    <PhoneCall size={28} />
                                 </a>
                             </div>
                         </div>
