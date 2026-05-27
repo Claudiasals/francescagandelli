@@ -247,4 +247,9 @@ Dopo il login e possibile:
 
 ## Licenza
 
-Progetto realizzato per uso privato/professionale del portfolio Francesca Gandelli.
+## Licenza
+
+Il codice sorgente può essere riutilizzato, modificato e adattato per altri progetti secondo i termini della licenza MIT.
+
+Foto, testi, immagini, logo, nome, brand e materiali relativi a Francesca Gandelli sono esclusi dalla licenza del codice e restano di proprietà dei rispettivi titolari. 
+Non possono essere copiati, modificati, distribuiti o riutilizzati senza autorizzazione scritta.
